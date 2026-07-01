@@ -58,7 +58,6 @@
 
 .comp DeductionStage {
   .decl extends(s1 : axiom_set, s2 : axiom_set)
-  extends(s1, s2) :- Input.cong_ext(s1, s2, _).
   extends(s1, s1) :- extends(s1, _).
   extends(s2, s2) :- extends(_, s2).
   extends(s1, s3) :- extends(s1, s2), extends(s2, s3).
