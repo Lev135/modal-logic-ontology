@@ -27,10 +27,9 @@ extends(s1, s3) :- extends(s1, s2), extends(s2, s3).
 equiv(s1, s2) :- extends(s1, s2), extends(s2, s1).
 
 .decl proves(s : axiom_set, ax : axiom)
-proves(s1, ax) :- extends(s1, s2), proves(s2, ax).
 .input proves(filename="proves.csv", rfc4180=true)
-.output proves()
 check_cong_logic(l), check_axiom(ax) :- proves(l, ax).
+proves(s1, ax) :- extends(s1, s2), proves(s2, ax).
 
 .decl ax_implies_over(l0 : axiom_set, ax0 : axiom, ax : axiom)
 .input ax_implies_over(filename="ax_implies_over.csv", rfc4180=true)
@@ -45,7 +44,6 @@ errors("Undefined logic " + l) :- check_cong_logic(l), !cong_logic(l).
 
 .decl cong_ext(l : axiom_set, l0 : axiom_set, ax : axiom)
 .input cong_ext(filename="cong_ext.csv", rfc4180=true)
-.output cong_ext(rfc4180=true)
 check_cong_logic(l0), check_axiom(ax) :- cong_ext(_, l0, ax).
 cong_logic(l) :- cong_ext(l, _, _).
 extends(l, l0), proves(l, ax) :- cong_ext(l, l0, ax).
@@ -54,6 +52,7 @@ extends(l1, l) :- cong_ext(l, l0, ax), extends(l1, l0), proves(l1, ax).
 .decl hidden_logic(l : axiom_set)
 .input hidden_logic(filename="hidden_logic.csv", rfc4180=true)
 check_cong_logic(l) :- hidden_logic(l).
+
 errors("Two logics are equal but none of them is marked as hidden: " + l1 + ", " + l2)
   :- cong_logic(l1), cong_logic(l2), !hidden_logic(l1), !hidden_logic(l2), l1 != l2, equiv(l1, l2).
 
@@ -71,5 +70,3 @@ warnings("Unable to check Makinson's theorem for the axiom " + ax)
 ax_alt("Alt₁", 1).
 ax_alt("Alt₂", 2).
 ax_implies_over("E", ax1, ax2) :- ax_alt(ax1, n1), ax_alt(ax2, n2), n1 < n2.
-
-errors("!!!") :- proves("KTAlt₂", "B").

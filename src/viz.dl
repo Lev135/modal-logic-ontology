@@ -1,9 +1,5 @@
 #include "main.dl"
 
-// .decl canon_repr(c : axiom_set, s : axiom_set)
-// canon_repr(c, s) :- cong_logic(c), cong_logic(s), !hidden_logic(c), equiv(c, s),
-//   ord(c) = o, o = min oo : { oo = ord(l), !hidden_logic(l), equiv(l, s) }.
-
 .decl node(c : axiom_set)
 node(c) :- cong_logic(c), !hidden_logic(c).// extends(c, "K").
 .output node(rfc4180=true)
