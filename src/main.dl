@@ -1,0 +1,62 @@
+.decl errors(what : symbol)
+.output errors(IO=stdout)
+
+.decl warnings(what : symbol)
+.output warnings(IO=stdout)
+
+// Formula in string representation
+.type formula <: symbol
+// Named formula
+.type axiom <: symbol
+
+.decl axiom_formula(ax : axiom, f : formula)
+.input axiom_formula(filename="axiom_formula.csv", rfc4180=true)
+
+.decl check_axiom(ax : axiom)
+errors("Undefined axiom " + ax) :- check_axiom(ax), !axiom_formula(ax, _).
+
+// Set of axioms
+.type axiom_set <: symbol
+
+.decl extends(s1 : axiom_set, s2 : axiom_set)
+extends(s1, s1) :- extends(s1, _).
+extends(s2, s2) :- extends(_, s2).
+extends(s1, s3) :- extends(s1, s2), extends(s2, s3).
+
+.decl equiv(s1 : axiom_set, s2 : axiom_set)
+equiv(s1, s2) :- extends(s1, s2), extends(s2, s1).
+
+.decl proves(s : axiom_set, ax : axiom)
+proves(s1, ax) :- extends(s1, s2), proves(s2, ax).
+.input proves(filename="proves.csv", rfc4180=true)
+.output proves()
+check_cong_logic(l), check_axiom(ax) :- proves(l, ax).
+
+.decl cong_logic(l : axiom_set)
+
+.decl check_cong_logic(l : axiom_set)
+errors("Undefined logic " + l) :- check_cong_logic(l), !cong_logic(l).
+
+.decl cong_ext(l : axiom_set, l0 : axiom_set, ax : axiom)
+.input cong_ext(filename="cong_ext.csv", rfc4180=true)
+.output cong_ext(rfc4180=true)
+check_cong_logic(l0), check_axiom(ax) :- cong_ext(_, l0, ax).
+cong_logic(l) :- cong_ext(l, _, _).
+extends(l, l0), proves(l, ax) :- cong_ext(l, l0, ax).
+extends(l1, l) :- cong_ext(l, l0, ax), extends(l1, l0), proves(l1, ax).
+
+.decl hidden_logic(l : axiom_set)
+.input hidden_logic(filename="hidden_logic.csv", rfc4180=true)
+check_cong_logic(l) :- hidden_logic(l).
+errors("Two logics are equal but none of them is marked as hidden: " + l1 + ", " + l2)
+  :- cong_logic(l1), cong_logic(l2), !hidden_logic(l1), !hidden_logic(l2), l1 != l2, equiv(l1, l2).
+
+cong_logic("E").
+proves("Fm", ax) :- axiom_formula(ax, _).
+
+// Makinson's theorem: for every formula ϕ one of the following holds:
+//   - Triv |- ϕ
+//   - Ver |- ϕ
+//   - K + ϕ is inconistent
+warnings("Unable to check Makinson's theorem for the axiom " + ax)
+  :- axiom_formula(ax, _), !proves("Triv", ax), !proves("Ver", ax), !proves("K" + ax, "Contr").
