@@ -69,12 +69,7 @@
   .decl proves(l : axiom_set, ax : axiom)
   proves(l, ax) :- Input.proves(l, ax).
   proves(l, ax) :- extends(l, l0), proves(l0, ax).
-  proves(l, ax) :- ax_implies_over(l, ax0, ax), proves(l, ax0).
-
-  .decl ax_implies_over(l : axiom_set, ax1 : axiom, ax2 : axiom)
-  ax_implies_over(l, ax1, ax2) :- Input.ax_implies_over(l, ax1, ax2).
-  ax_implies_over(l, ax1, ax2) :- ax_implies_over(l0, ax1, ax2), extends(l, l0).
-
+  proves(l, ax) :- Input.ax_implies_over(l0, ax0, ax), extends(l, l0), proves(l, ax0).
 }
 
 .init Deduction = DeductionStage
@@ -88,13 +83,14 @@
       !Input.hidden_logic(l1), !Input.hidden_logic(l2),
       l1 != l2, equiv(l1, l2).
 
-  // Makinson's theorem: for every formula ϕ one of the following holds:
-  //   - Triv |- ϕ
-  //   - Ver |- ϕ
-  //   - K + ϕ is inconistent
-  warnings("", "Unable to check Makinson's theorem for the axiom " + ax)
-    :- Input.axiom_formula(ax, _), !Deduction.proves("Triv", ax),
-       !Deduction.proves("Ver", ax), !Deduction.ax_implies_over("K", ax, "Contr").
+  // Makinson's theorem: for every logic Λ ⊇ K one of the following holds:
+  //   - Λ ⊆ Triv
+  //   - Λ ⊆ Ver
+  //   - Λ |- ⊥
+  warnings("", "Unable to check Makinson's theorem for the logic " + l)
+    :- Input.cong_logic(l), Deduction.extends(l, "K"),
+       !Deduction.extends("Triv", l), !Deduction.extends("Ver", l),
+       !Deduction.proves(l,"Contr").
 }
 
 .init Post = PostStage
