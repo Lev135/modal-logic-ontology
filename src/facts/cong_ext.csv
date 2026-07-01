@@ -37,6 +37,13 @@ KD4,K4,D
 KDB4,KDB,4
 S4,K4,T
 Grz,S4,Grz
+KAlt₁,K,Alt₁
+KAlt₂,K,Alt₂
+KDAlt₁,KD,Alt₁
+KDAlt₂,KD,Alt₂
+KTAlt₂,KT,Alt₂
+KAlt₂.2,KAlt₂,.2
+KDAlt₂.2,KDAlt₂,.2
 K.1,K,.1
 K.2,K,.2
 K4.1,K4,.1

@@ -71,3 +71,5 @@ warnings("Unable to check Makinson's theorem for the axiom " + ax)
 ax_alt("Alt₁", 1).
 ax_alt("Alt₂", 2).
 ax_implies_over("E", ax1, ax2) :- ax_alt(ax1, n1), ax_alt(ax2, n2), n1 < n2.
+
+errors("!!!") :- proves("KTAlt₂", "B").
