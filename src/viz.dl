@@ -1,13 +1,19 @@
 #include "main.dl"
 
-.decl node(c : axiom_set)
-node(c) :- Input.cong_logic(c), !Input.hidden_logic(c).// extends(c, "K").
+.type color <: symbol
+
+.decl show(l : axiom_set)
+show(l) :- Input.cong_logic(l), !Input.hidden_logic(l).
+
+.decl node(l : axiom_set, c : color)
+node(l, "green") :- show(l), Deduction.extends(l, "K").
+node(l, "yellow") :- show(l), !Deduction.extends(l, "K").
 .output node(rfc4180=true)
 
 .decl extends3(c1 : axiom_set, c2 : axiom_set, c3 : axiom_set)
-extends3(c1, c2, c3) :- Deduction.extends(c1, c2), Deduction.extends(c2, c3), node(c2),
+extends3(c1, c2, c3) :- Deduction.extends(c1, c2), Deduction.extends(c2, c3), show(c2),
   !Deduction.extends(c2, c1), !Deduction.extends(c3, c2).
 
 .decl edge(c1 : axiom_set, c2 : axiom_set)
-edge(c2, c1) :- Deduction.extends(c1, c2), !extends3(c1, _, c2), node(c1), node(c2), c1 != c2.
+edge(c2, c1) :- Deduction.extends(c1, c2), !extends3(c1, _, c2), show(c1), show(c2), c1 != c2.
 .output edge(rfc4180=true)
