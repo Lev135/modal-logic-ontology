@@ -6,8 +6,10 @@
 show(l) :- Input.cong_logic(l), !Input.hidden_logic(l).
 
 .decl node(l : axiom_set, c : color)
-node(l, "green") :- show(l), Deduction.extends(l, "K").
-node(l, "yellow") :- show(l), !Deduction.extends(l, "K").
+node(l, "green") :- show(l), Post.logic_is_in(l, "coNP").
+node(l, "yellow") :- show(l), Post.logic_is_complete(l, "PSpace").
+node(l, "orange") :- show(l), Post.logic_is_hard(l, "PSpace"), !Post.logic_is_in(l, "PSpace").
+node(l, "white") :- show(l), !Post.logic_is_in(l, "coNP"), !Post.logic_is_hard(l, "PSpace").
 .output node(rfc4180=true)
 
 .decl extends3(c1 : axiom_set, c2 : axiom_set, c3 : axiom_set)

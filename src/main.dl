@@ -6,6 +6,7 @@
 .type axiom_set <: symbol
 // Source file name
 .type src_file <: symbol
+.type complexity_class <: symbol
 
 .decl errors(source : src_file, what : symbol)
 .output errors(IO=stdout)
@@ -44,6 +45,15 @@
   .input hidden_logic(filename="hidden_logic.csv", rfc4180=true)
   check_cong_logic(l, f) :- hidden_logic(l), f = "hidden_logic.csv".
 
+  .decl compl_class(cc : complexity_class)
+  compl_class(cc) :- less_cc(cc, _); less_cc(_, cc).
+
+  .decl less_cc(cc1 : complexity_class, cc2 : complexity_class)
+  .input less_cc(filename="less_cc.csv", rfc4180=true)
+
+  .decl check_complexity_class(cc : complexity_class, src : src_file)
+  errors(src, "Undefined complexity class " + cc) :- check_complexity_class(cc, src), !compl_class(cc).
+
   cong_logic("E").
 
   proves("Fm", ax) :- axiom_formula(ax, _).
@@ -69,6 +79,10 @@
   proves(l, ax) :- Input.proves(l, ax).
   proves(l, ax) :- extends(l, l0), proves(l0, ax).
   proves(l, ax) :- Input.ax_implies_over(l0, ax0, ax), extends(l, l0), proves(l, ax0).
+
+  .decl less_cc(cc1 : complexity_class, cc2 : complexity_class)
+  less_cc(cc1, cc2) :- Input.less_cc(cc1, cc2).
+  less_cc(cc1, cc3) :- less_cc(cc1, cc2), less_cc(cc2, cc3).
 }
 
 .init Deduction = DeductionStage
@@ -90,6 +104,25 @@
     :- Input.cong_logic(l), Deduction.extends(l, "K"),
        !Deduction.extends("Triv", l), !Deduction.extends("Ver", l),
        !Deduction.proves(l,"Contr").
+
+  errors("", "Incorrect complexity bounds. In: " + ccIn + "; hard: " + ccHard)
+    :- logic_is_in(l, ccIn), logic_is_hard(l, ccHard), Deduction.less_cc(ccIn, ccHard).
+
+  .decl logic_is_in(l : axiom_set, cc : complexity_class)
+  Input.check_cong_logic(l, ""), Input.check_complexity_class(cc, "") :- logic_is_in(l, cc).
+
+  .decl logic_is_hard(l : axiom_set, cc : complexity_class)
+  Input.check_cong_logic(l, ""), Input.check_complexity_class(cc, "") :- logic_is_hard(l, cc).
+
+  .decl logic_is_complete(l : axiom_set, cc : complexity_class)
+  logic_is_complete(l, cc) :- logic_is_in(l, cc), logic_is_hard(l, cc).
+
+  logic_is_hard(l, "coNP") :- Input.cong_logic(l).
+  logic_is_hard(l, "PSpace") :- Input.cong_logic(l), Deduction.extends("GL", l), Deduction.extends(l, "K").
+  logic_is_hard(l, "PSpace") :- Input.cong_logic(l), Deduction.extends("Grz", l), Deduction.extends(l, "K").
+  logic_is_hard("EC", "PSpace").
+  logic_is_in(l, "coNP") :- l = "EM"; l = "EMD"; l = "E"; l = "EMP".
+  logic_is_in(l, "PSpace") :- l = "K"; l = "KD"; l = "GL".
 }
 
 .init Post = PostStage
