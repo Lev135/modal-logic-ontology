@@ -3,6 +3,7 @@ EM4*,4
 E4,4ʷ
 ET,D
 ET,P
+ET,4ᵈ
 EMD,P
 ECP,D
 EC4,4*
@@ -11,10 +12,6 @@ S4.3,.2
 EM.1,P
 ET5,B
 KB4,5
-EMB,C
-EMB,N
-GL.2,Ver
-GL/P,Contr
 Triv,Grz
 Triv,N
 Triv,C
@@ -24,6 +21,7 @@ KTᵈ,.3
 KTᵈ,4
 KTᵈ,B
 KTᵈ,5
+KTᵈ,Alt₁
 Ver,C
 Ver,N
 Ver,Tᵈ
