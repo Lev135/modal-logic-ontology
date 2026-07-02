@@ -1,21 +1,21 @@
-#include "main.dl"
+#include "complexity/compl_logic.dl"
 
 .type color <: symbol
 
 .decl show(l : axiom_set)
-show(l) :- Input.cong_logic(l), !Input.hidden_logic(l).
+show(l) :- CongLogs.is(l), !CongLogs.is_hidden(l).
 
 .decl node(l : axiom_set, c : color)
-node(l, "green") :- show(l), Post.logic_is_in(l, "coNP").
-node(l, "yellow") :- show(l), Post.logic_is_complete(l, "PSpace").
-node(l, "orange") :- show(l), Post.logic_is_hard(l, "PSpace"), !Post.logic_is_in(l, "PSpace").
-node(l, "white") :- show(l), !Post.logic_is_in(l, "coNP"), !Post.logic_is_hard(l, "PSpace").
+node(l, "green") :- show(l), ComplClasses.is_in("SAT_" + l, "coNP").
+node(l, "yellow") :- show(l), ComplClasses.is_complete("SAT_" + l, "PSpace").
+node(l, "orange") :- show(l), ComplClasses.is_hard("SAT_" + l, "PSpace"), !ComplClasses.is_in("SAT_" + l, "PSpace").
+node(l, "white") :- show(l), !ComplClasses.is_in("SAT_" + l, "coNP"), !ComplClasses.is_hard("SAT_" + l, "PSpace").
 .output node(rfc4180=true)
 
 .decl extends3(c1 : axiom_set, c2 : axiom_set, c3 : axiom_set)
-extends3(c1, c2, c3) :- Deduction.extends(c1, c2), Deduction.extends(c2, c3), show(c2),
-  !Deduction.extends(c2, c1), !Deduction.extends(c3, c2).
+extends3(c1, c2, c3) :- CongLogs.extends(c1, c2), CongLogs.extends(c2, c3), show(c2),
+  !CongLogs.extends(c2, c1), !CongLogs.extends(c3, c2).
 
 .decl edge(c1 : axiom_set, c2 : axiom_set)
-edge(c2, c1) :- Deduction.extends(c1, c2), !extends3(c1, _, c2), show(c1), show(c2), c1 != c2.
+edge(c2, c1) :- CongLogs.extends(c1, c2), !extends3(c1, _, c2), show(c1), show(c2), c1 != c2.
 .output edge(rfc4180=true)

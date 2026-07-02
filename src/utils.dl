@@ -1,0 +1,7 @@
+#pragma once
+
+.decl errors(what : symbol)
+.output errors(IO=stdout)
+
+.decl warnings(what : symbol)
+.output warnings(IO=stdout)

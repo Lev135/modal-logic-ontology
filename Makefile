@@ -7,7 +7,7 @@ clean:
 
 souffle:
 	@mkdir -p out/
-	souffle src/$(FILE) -F src/facts/ -D out/
+	souffle src/$(FILE) -F src/ -D out/
 
 viz: souffle
 	python3 scripts/viz.py

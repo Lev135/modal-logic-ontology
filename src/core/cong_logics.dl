@@ -1,0 +1,80 @@
+#pragma once
+
+#include "./axioms.dl"
+
+// Set of axioms
+.type axiom_set <: symbol
+
+.comp CongLogsComp {
+  .decl dec(l : axiom_set)
+
+  .decl dec_ext(l : axiom_set, l0 : axiom_set, ax : axiom)
+  dec(l), check(l0), Axioms.check(ax) :- dec_ext(l, l0, ax).
+  errors("Logic declared twice: " + l)
+    :- dec_ext(l, l01, ax1), dec_ext(l, l02, ax2), (l01 != l02 ; ax1 != ax2).
+
+  .decl dec_proves(l : axiom_set, ax : axiom)
+  check(l), Axioms.check(ax) :- dec_proves(l, ax).
+
+  .decl dec_ax_implies_over(l : axiom_set, ax1 : axiom, ax2 : axiom)
+  check(l), Axioms.check(ax1), Axioms.check(ax2) :- dec_ax_implies_over(l, ax1, ax2).
+
+  .decl dec_hidden(l : axiom_set)
+  check(l) :- dec_hidden(l).
+
+  .decl is(l : axiom_set)
+  is(l) :- dec(l).
+
+  .decl is_hidden(l : axiom_set)
+  is_hidden(l) :- dec_hidden(l).
+
+  .decl check(l : axiom_set)
+  errors("Undefined logic: " + l) :- check(l), !is(l).
+
+  .decl equiv(s1 : axiom_set, s2 : axiom_set)
+  equiv(s1, s2) :- extends(s1, s2), extends(s2, s1).
+
+  .decl extends(s1 : axiom_set, s2 : axiom_set)
+  .decl proves(l : axiom_set, ax : axiom)
+
+  extends(s, s) :- extends(s, _); extends(_, s).
+  extends(s1, s3) :- extends(s1, s2), extends(s2, s3).
+
+  proves(l, ax) :- dec_proves(l, ax).
+  proves(l, ax) :- extends(l, l0), proves(l0, ax).
+  proves(l, ax) :- dec_ax_implies_over(l0, ax0, ax), extends(l, l0), proves(l, ax0).
+
+  extends(l, l0), proves(l, ax) :- dec_ext(l, l0, ax).
+  extends(l1, l) :- dec_ext(l, l0, ax), extends(l1, l0), proves(l1, ax).
+}
+
+.init CongLogs = CongLogsComp
+
+.input CongLogs.dec_ext(filename="core/cong_ext.csv", rfc4180=true)
+.input CongLogs.dec_proves(filename="core/proves.csv", rfc4180=true)
+.input CongLogs.dec_ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true)
+.input CongLogs.dec_hidden(filename="core/hidden_logic.csv", rfc4180=true)
+
+// Extra declarations
+
+CongLogs.dec("E").
+
+CongLogs.dec_proves("Fm", ax) :- Axioms.is(ax).
+
+CongLogs.dec_ax_implies_over("E", ax1, ax2)
+  :- Axioms.is_alt(ax1, n1), Axioms.is_alt(ax2, n2), n1 < n2.
+
+// Extra checks
+
+errors("Two logics are equal but none of them is marked as hidden: " + l1 + ", " + l2)
+  :- CongLogs.is(l1), CongLogs.is(l2),
+    !CongLogs.is_hidden(l1), !CongLogs.is_hidden(l2),
+    l1 != l2, CongLogs.equiv(l1, l2).
+
+// Makinson's theorem: for every logic Λ ⊇ K one of the following holds:
+//   - Λ ⊆ Triv
+//   - Λ ⊆ Ver
+//   - Λ |- ⊥
+warnings("Unable to check Makinson's theorem for the logic " + l)
+  :- CongLogs.is(l), CongLogs.extends(l, "K"),
+      !CongLogs.extends("Triv", l), !CongLogs.extends("Ver", l), !CongLogs.proves(l,"Contr").

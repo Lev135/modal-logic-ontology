@@ -1,0 +1,51 @@
+#pragma once
+#include "../utils.dl"
+
+.type compl_class <: symbol
+
+.type task <: symbol
+
+
+.comp ComplClassesComp {
+  .decl dec(cc : compl_class)
+
+  .decl dec_less(cc1 : compl_class, cc2 : compl_class)
+  check(cc1), check(cc2) :- dec_less(cc1, cc2).
+
+  .decl dec_in(t : task, cc : compl_class)
+  check(cc) :- dec_in(_, cc).
+
+  .decl dec_hard(t : task, cc : compl_class)
+  check(cc) :- dec_hard(_, cc).
+
+  .decl is(cc : compl_class)
+  is(cc) :- dec(cc).
+
+  .decl is_in(t : task, cc : compl_class)
+  is_in(t, cc) :- dec_in(t, cc).
+
+  .decl is_hard(t : task, cc : compl_class)
+  is_hard(t, cc) :- dec_hard(t, cc).
+
+  .decl check(cc : compl_class)
+  errors("Undefined complexity class " + cc) :- check(cc), !is(cc).
+
+  .decl is_complete(t : task, cc : compl_class)
+  is_complete(t, cc) :- is_in(t, cc), is_hard(t, cc).
+
+  .decl less(cc1 : compl_class, cc2 : compl_class)
+  less(cc1, cc2) :- dec_less(cc1, cc2).
+  less(cc1, cc3) :- less(cc1, cc2), less(cc2, cc3).
+}
+
+.init ComplClasses = ComplClassesComp
+
+// Input
+
+.input ComplClasses.dec_less(filename="complexity/less_cc.csv", rfc4180=true)
+ComplClasses.dec(cc) :- ComplClasses.dec_less(cc, _); ComplClasses.dec_less(_, cc).
+
+// Extra checks
+
+errors("Incorrect complexity bounds for task " + t + ". In: " + ccIn + "; hard: " + ccHard)
+  :- ComplClasses.is_in(t, ccIn), ComplClasses.is_hard(t, ccHard), ComplClasses.less(ccIn, ccHard).

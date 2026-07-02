@@ -1,0 +1,29 @@
+#pragma once
+#include "../utils.dl"
+
+// Formula in string representation
+.type formula <: symbol
+// Named formula
+.type axiom <: symbol
+
+.comp AxiomsComp {
+  .decl dec(ax : axiom, f : formula)
+  errors("Axiom declared twice: " + ax)
+    :- dec(ax, f1), dec(ax, f2), f1 != f2.
+
+  .decl is(ax : axiom)
+  is(ax) :- dec(ax, _).
+
+  .decl check(ax: axiom)
+  errors("Undefined axiom: " + ax)
+    :- Axioms.check(ax), !is(ax).
+
+  .decl is_alt(ax : axiom, n : unsigned)
+  Axioms.check(ax) :- is_alt(ax, _).
+  is_alt("Alt₁", 1).
+  is_alt("Alt₂", 2).
+}
+
+.init Axioms = AxiomsComp
+
+.input Axioms.dec(filename="core/axiom_formula.csv", rfc4180=true)
