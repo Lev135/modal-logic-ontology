@@ -8,7 +8,7 @@ EMD,P
 ECP,D
 EC4,4*
 Grz,.1
-S4.3,.2
+K4.3,.2
 EM.1,P
 ET5,B
 KB4,5
@@ -17,7 +17,6 @@ Triv,Grz
 Triv,N
 Triv,C
 Triv,M
-KTᵈ,.2
 KTᵈ,.3
 KTᵈ,4
 KTᵈ,B
