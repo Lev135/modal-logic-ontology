@@ -19,14 +19,8 @@
   .decl dec_ax_implies_over(l : axiom_set, ax1 : axiom, ax2 : axiom)
   check(l), Axioms.check(ax1), Axioms.check(ax2) :- dec_ax_implies_over(l, ax1, ax2).
 
-  .decl dec_hidden(l : axiom_set)
-  check(l) :- dec_hidden(l).
-
   .decl is(l : axiom_set)
   is(l) :- dec(l).
-
-  .decl is_hidden(l : axiom_set)
-  is_hidden(l) :- dec_hidden(l).
 
   .decl check(l : axiom_set)
   errors("Undefined logic: " + l) :- check(l), !is(l).
@@ -53,7 +47,6 @@
 .input CongLogs.dec_ext(filename="core/cong_ext.csv", rfc4180=true)
 .input CongLogs.dec_proves(filename="core/proves.csv", rfc4180=true)
 .input CongLogs.dec_ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true)
-.input CongLogs.dec_hidden(filename="core/hidden_logic.csv", rfc4180=true)
 
 // Extra declarations
 
@@ -66,9 +59,8 @@ CongLogs.dec_ax_implies_over("E", ax1, ax2)
 
 // Extra checks
 
-errors("Two logics are equal but none of them is marked as hidden: " + l1 + ", " + l2)
+warnings("Two logics are equal: " + l1 + ", " + l2)
   :- CongLogs.is(l1), CongLogs.is(l2),
-    !CongLogs.is_hidden(l1), !CongLogs.is_hidden(l2),
     l1 != l2, CongLogs.equiv(l1, l2).
 
 // Makinson's theorem: for every logic Λ ⊇ K one of the following holds:
