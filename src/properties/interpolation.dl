@@ -1,0 +1,15 @@
+#include "../core/cong_logics.dl"
+
+.comp InterpolationComp {
+  .decl sat_CIP(l : axiom_set)
+  .decl sat_LIP(l : axiom_set)
+  .decl nsat_CIP(l : axiom_set)
+  .decl nsat_LIP(l : axiom_set)
+
+  sat_CIP(l) :- sat_LIP(l).
+  nsat_LIP(l) :- nsat_CIP(l).
+}
+.init Interpolation = InterpolationComp
+
+Interpolation.nsat_CIP("K4.3").
+Interpolation.sat_LIP("K").
