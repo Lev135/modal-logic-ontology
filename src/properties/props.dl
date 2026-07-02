@@ -1,0 +1,66 @@
+#include "../core/cong_logics.dl"
+#include "../complexity/compl_classes.dl"
+
+.comp ReasonerComp<P> {
+  .decl dec_sat(p : P)
+  .decl dec_nsat(p : P)
+  .decl dec_rule1(p : P, q1 : P)
+  .decl dec_rule2(p : P, q1 : P, q2 : P)
+  .decl dec_disjoint2(q1 : P, q2 : P)
+
+  .decl sat(p : P)
+  .decl nsat(p : P)
+  sat(p) :- dec_sat(p).
+  sat(p) :- dec_rule1(p, q1), sat(q1).
+  sat(p) :- dec_rule2(p, q1, q2), sat(q1), sat(q2).
+  nsat(p) :- dec_nsat(p).
+  nsat(q1) :- dec_rule1(p, q1), nsat(p).
+  nsat(q1) :- dec_rule2(p, q1, q2), nsat(p), sat(q2).
+  nsat(q2) :- dec_rule2(p, q1, q2), nsat(p), sat(q1).
+  nsat(q1) :- dec_disjoint2(q1, q2), sat(q2).
+  nsat(q2) :- dec_disjoint2(q1, q2), sat(q1).
+
+  .decl stringP(p : P, s : symbol)
+  errors("Reasoner: SAT & UNSAT: " + s)
+    :- sat(p), nsat(p), (stringP(p, s); !stringP(p, _), s = "unshowable").
+}
+
+.type Prop
+  = SAT_is_in { l : axiom_set, cc : compl_class }
+  | SAT_is_hard { l : axiom_set, cc : compl_class }
+  | SAT_is_complete { l : axiom_set, cc : compl_class }
+  | CIP { l : axiom_set }
+  | LIP { l : axiom_set }
+
+.init Reasoner = ReasonerComp<Prop>
+
+.output Reasoner.sat()
+.output Reasoner.nsat()
+
+Reasoner.stringP($SAT_is_in(l, cc), l + "-SAT is in " + cc),
+Reasoner.stringP($SAT_is_hard(l, cc), l + "-SAT is " + cc + "-hard"),
+Reasoner.stringP($SAT_is_complete(l, cc), l + "-SAT is " + cc + "-complete")
+  :- CongLogs.is(l), ComplClasses.is(cc).
+Reasoner.stringP($CIP(l), l + " has CIP"),
+Reasoner.stringP($LIP(l), l + " has LIP")
+  :- CongLogs.is(l).
+
+Reasoner.dec_rule1($SAT_is_in(l, cc2), $SAT_is_in(l, cc1)),
+Reasoner.dec_rule1($SAT_is_hard(l, cc1), $SAT_is_hard(l, cc2)),
+Reasoner.dec_disjoint2($SAT_is_hard(l, cc2), $SAT_is_in(l, cc1))
+  :- CongLogs.is(l), ComplClasses.less(cc1, cc2).
+Reasoner.dec_rule2($SAT_is_complete(l, cc), $SAT_is_hard(l, cc), $SAT_is_in(l, cc))
+  :- CongLogs.is(l), ComplClasses.is(cc).
+
+Reasoner.dec_sat($SAT_is_hard(l, "coNP")) :- CongLogs.is(l).
+Reasoner.dec_sat($SAT_is_hard(l, "PSpace"))
+  :- CongLogs.is(l), (CongLogs.extends("GL", l); CongLogs.extends("Grz", l)), CongLogs.extends(l, "K").
+Reasoner.dec_sat($SAT_is_hard("EC", "PSpace")).
+Reasoner.dec_sat($SAT_is_in(l, "coNP")) :- l = "EM"; l = "EMD"; l = "E"; l = "EMP".
+Reasoner.dec_sat($SAT_is_in(l, "PSpace")) :- l = "K"; l = "KD"; l = "GL".
+
+
+Reasoner.dec_rule1($CIP(l), $LIP(l)) :- CongLogs.is(l).
+
+Reasoner.dec_sat($LIP("K")).
+Reasoner.dec_nsat($CIP("K4.3")).

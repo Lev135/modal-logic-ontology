@@ -1,4 +1,4 @@
-#include "complexity/compl_logic.dl"
+#include "properties/props.dl"
 
 .type color <: symbol
 
@@ -6,10 +6,12 @@
 show(l) :- CongLogs.is(l).
 
 .decl node(l : axiom_set, c : color)
-node(l, "green") :- show(l), ComplClasses.is_in("SAT_" + l, "coNP").
-node(l, "yellow") :- show(l), ComplClasses.is_complete("SAT_" + l, "PSpace").
-node(l, "orange") :- show(l), ComplClasses.is_hard("SAT_" + l, "PSpace"), !ComplClasses.is_in("SAT_" + l, "PSpace").
-node(l, "white") :- show(l), !ComplClasses.is_in("SAT_" + l, "coNP"), !ComplClasses.is_hard("SAT_" + l, "PSpace").
+node(l, "green") :- show(l), Reasoner.sat($SAT_is_in(l, "coNP")).
+node(l, "yellow") :- show(l), Reasoner.sat($SAT_is_complete(l, "PSpace")).
+node(l, "orange") :- show(l), Reasoner.sat($SAT_is_hard(l, "PSpace")),
+  !Reasoner.sat($SAT_is_in(l, "PSpace")).
+node(l, "white") :- show(l), !Reasoner.sat($SAT_is_in(l, "coNP")),
+  !Reasoner.sat($SAT_is_hard(l, "PSpace")).
 .output node(rfc4180=true)
 
 .decl extends3(c1 : axiom_set, c2 : axiom_set, c3 : axiom_set)
