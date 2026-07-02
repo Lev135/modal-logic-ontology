@@ -5,6 +5,7 @@
 .comp ComplexityComp<T> {
   .decl in(t : T, cc : CompC)
   .decl hard(t : T, cc : CompC)
+  .decl check(t :T)
 
   .comp R<T> {
     .decl less(cc1 : CompC, cc2 : CompC)
@@ -25,11 +26,15 @@
     complete(t, cc) :- in(t, cc), hard(t, cc).
   }
   .init r = R<T>
+
+  check(t) :- in(t, _); hard(t, _).
 }
 
 .type Task = SAT { l : axiom_set }
 
 .init Complexity = ComplexityComp<Task>
+
+CongLogs.check(l) :- Complexity.check($SAT(l)).
 
 Complexity.hard($SAT(l), $coNP()) :- CongLogs.is(l).
 Complexity.hard($SAT(l), $PSpace())

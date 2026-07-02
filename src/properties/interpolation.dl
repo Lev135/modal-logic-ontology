@@ -8,6 +8,8 @@
 
   sat_CIP(l) :- sat_LIP(l).
   nsat_LIP(l) :- nsat_CIP(l).
+
+  CongLogs.check(l) :- sat_CIP(l); sat_LIP(l); nsat_CIP(l); nsat_LIP(l).
 }
 .init Interpolation = InterpolationComp
 
