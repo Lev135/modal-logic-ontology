@@ -5,6 +5,7 @@
 .comp ComplexityComp<T> {
   .decl in(t : T, cc : CompC)
   .decl hard(t : T, cc : CompC)
+  .decl simpler(t1 : T, t2 : T)
   .decl check(t :T)
 
   .comp R<T> {
@@ -23,6 +24,9 @@
     in(t, cc2) :- in(t, cc1), less(cc1, cc2).
     hard(t, cc1) :- hard(t, cc2), less(cc1, cc2).
 
+    in(t1, cc) :- in(t2, cc), simpler(t1, t2).
+    hard(t2, cc) :- hard(t1, cc), simpler(t1, t2).
+
     complete(t, cc) :- in(t, cc), hard(t, cc).
   }
   .init r = R<T>
@@ -30,17 +34,19 @@
   check(t) :- in(t, _); hard(t, _).
 }
 
-.type Task = SAT { l : axiom_set }
+.type Task = SAT { l : axiom_set, vars : InfUnsigned }
 
 .init Complexity = ComplexityComp<Task>
 
-CongLogs.check(l) :- Complexity.check($SAT(l)).
+CongLogs.check(l) :- Complexity.check($SAT(l, _)).
 
-Complexity.hard($SAT(l), $coNP()) :- CongLogs.is(l).
-Complexity.hard($SAT(l), $PSpace())
+Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- CongLogs.is(l), inf_less(n1, n2).
+
+Complexity.hard($SAT(l, $Inf()), $coNP()) :- CongLogs.is(l).
+Complexity.hard($SAT(l, $Inf()), $PSpace())
   :- CongLogs.is(l), CongLogs.extends("GL", l), CongLogs.extends(l, "K").
-Complexity.hard($SAT(l), $PSpace())
+Complexity.hard($SAT(l, $Inf()), $PSpace())
   :- CongLogs.is(l), CongLogs.extends("Grz", l), CongLogs.extends(l, "K").
-Complexity.hard($SAT("EC"), $PSpace()).
-Complexity.in($SAT(l), $coNP()) :- l = "EM"; l = "EMD"; l = "E"; l = "EMP".
-Complexity.in($SAT(l), $PSpace()) :- l = "K"; l = "KD"; l = "GL".
+Complexity.hard($SAT("EC", $Inf()), $PSpace()).
+Complexity.in($SAT(l, $Inf()), $coNP()) :- l = "EM"; l = "EMD"; l = "E"; l = "EMP".
+Complexity.in($SAT(l, $Inf()), $PSpace()) :- l = "K"; l = "KD"; l = "GL".
