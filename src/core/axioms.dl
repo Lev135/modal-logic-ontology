@@ -16,10 +16,10 @@
 
   .decl check(ax: axiom)
   errors("Undefined axiom: " + ax)
-    :- Axioms.check(ax), !is(ax).
+    :- check(ax), !is(ax).
 
   .decl is_alt(ax : axiom, n : unsigned)
-  Axioms.check(ax) :- is_alt(ax, _).
+  check(ax) :- is_alt(ax, _).
   is_alt("Alt₁", 1).
   is_alt("Alt₂", 2).
 }
