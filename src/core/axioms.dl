@@ -3,27 +3,26 @@
 
 // Formula in string representation
 .type formula <: symbol
-// Named formula
-.type axiom <: symbol
+// Axiom name wrapped in ADT
+.type Axiom = A { ax_name : symbol }
 
 .comp AxiomsComp {
-  .decl dec(ax : axiom, f : formula)
-  errors("Axiom declared twice: " + ax)
-    :- dec(ax, f1), dec(ax, f2), f1 != f2.
+  .decl dec(ax : Axiom, f : formula)
+  errors("Axiom declared twice: " + n)
+    :- dec(ax, f1), dec(ax, f2), f1 != f2, ax = $A(n).
 
-  .decl is(ax : axiom)
+  .decl is(ax : Axiom)
+  .output is(filename="declared/$A.csv")
   is(ax) :- dec(ax, _).
 
-  .decl check(ax: axiom)
-  errors("Undefined axiom: " + ax)
-    :- check(ax), !is(ax).
-
-  .decl is_alt(ax : axiom, n : unsigned)
-  check(ax) :- is_alt(ax, _).
-  is_alt("Alt₁", 1).
-  is_alt("Alt₂", 2).
+  .decl is_alt(ax : Axiom, n : unsigned)
 }
 
 .init Axioms = AxiomsComp
 
-.input Axioms.dec(filename="core/axiom_formula.csv", rfc4180=true)
+.decl _axiom_dec(ax : symbol, f : formula)
+.input _axiom_dec(filename="core/axiom_formula.csv", rfc4180=true, headers=true)
+Axioms.dec($A(ax), f) :- _axiom_dec(ax, f).
+
+Axioms.is_alt($A("Alt₁"), 1).
+Axioms.is_alt($A("Alt₂"), 2).

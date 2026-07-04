@@ -2,22 +2,22 @@
 
 .type color <: symbol
 
-.decl show(l : axiom_set)
-show(l) :- CongLogs.is(l).
+.decl show(l : Logic, name : symbol)
+show($L(name), name) :- CongLogs.is($L(name)).
 
-.decl node(l : axiom_set, c : color)
-node(l, "green") :- show(l), Complexity.in($SAT(l, $Inf()), $coNP()).
-node(l, "yellow") :- show(l), Complexity.r.complete($SAT(l, $Inf()), $PSpace()).
-node(l, "orange") :- show(l), Complexity.hard($SAT(l, $Inf()), $PSpace()),
+.decl node(l : symbol, c : color)
+node(n, "green") :- show(l, n), Complexity.in($SAT(l, $Inf()), $coNP()).
+node(n, "yellow") :- show(l, n), Complexity.r.complete($SAT(l, $Inf()), $PSpace()).
+node(n, "orange") :- show(l, n), Complexity.hard($SAT(l, $Inf()), $PSpace()),
   !Complexity.in($SAT(l, $Inf()), $PSpace()).
-node(l, "white") :- show(l), !Complexity.in($SAT(l, $Inf()), $coNP()),
+node(n, "white") :- show(l, n), !Complexity.in($SAT(l, $Inf()), $coNP()),
   !Complexity.hard($SAT(l, $Inf()), $PSpace()).
 .output node(rfc4180=true)
 
-.decl extends3(c1 : axiom_set, c2 : axiom_set, c3 : axiom_set)
-extends3(c1, c2, c3) :- CongLogs.extends(c1, c2), CongLogs.extends(c2, c3), show(c2),
+.decl extends3(c1 : Logic, c2 : Logic, c3 : Logic)
+extends3(c1, c2, c3) :- CongLogs.extends(c1, c2), CongLogs.extends(c2, c3), show(c2, _),
   !CongLogs.extends(c2, c1), !CongLogs.extends(c3, c2).
 
-.decl edge(c1 : axiom_set, c2 : axiom_set)
-edge(c2, c1) :- CongLogs.extends(c1, c2), !extends3(c1, _, c2), show(c1), show(c2), c1 != c2.
+.decl edge(c1 : symbol, c2 : symbol)
+edge(n2, n1) :- CongLogs.extends(c1, c2), !extends3(c1, _, c2), show(c1, n1), show(c2, n2), c1 != c2.
 .output edge(rfc4180=true)

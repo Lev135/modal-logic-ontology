@@ -2,71 +2,74 @@
 
 #include "./axioms.dl"
 
-// Set of axioms
-.type axiom_set <: symbol
+// Logic name wrapped in ADT
+.type Logic = L { l_name : symbol }
 
 .comp CongLogsComp {
-  .decl dec(l : axiom_set)
+  .decl dec(l : Logic)
 
-  .decl dec_ext(l : axiom_set, l0 : axiom_set, ax : axiom)
-  dec(l), check(l0), Axioms.check(ax) :- dec_ext(l, l0, ax).
+  .decl ext(l : Logic, l0 : Logic, ax : Axiom)
+  dec(l) :- ext(l, _, _).
   errors("Logic declared twice: " + l)
-    :- dec_ext(l, l01, ax1), dec_ext(l, l02, ax2), (l01 != l02 ; ax1 != ax2).
+    :- ext($L(l), l01, ax1), ext($L(l), l02, ax2), (l01 != l02 ; ax1 != ax2).
 
-  .decl dec_proves(l : axiom_set, ax : axiom)
-  check(l), Axioms.check(ax) :- dec_proves(l, ax).
+  .decl ax_implies_over(l : Logic, ax1 : Axiom, ax2 : Axiom)
 
-  .decl dec_ax_implies_over(l : axiom_set, ax1 : axiom, ax2 : axiom)
-  check(l), Axioms.check(ax1), Axioms.check(ax2) :- dec_ax_implies_over(l, ax1, ax2).
-
-  .decl is(l : axiom_set)
+  .decl is(l : Logic)
   is(l) :- dec(l).
+  .output is(filename="declared/$L.csv")
 
-  .decl check(l : axiom_set)
-  errors("Undefined logic: " + l) :- check(l), !is(l).
+  .decl equiv(l1 : Logic, l2 : Logic)
+  equiv(l1, l2) :- extends(l1, l2), extends(l2, l1).
 
-  .decl equiv(s1 : axiom_set, s2 : axiom_set)
-  equiv(s1, s2) :- extends(s1, s2), extends(s2, s1).
+  .decl extends(l1 : Logic, l2 : Logic)
+  .decl proves(l : Logic, ax : Axiom)
 
-  .decl extends(s1 : axiom_set, s2 : axiom_set)
-  .decl proves(l : axiom_set, ax : axiom)
+  extends(l, l) :- is(l).
+  extends(l1, l3) :- extends(l1, l2), extends(l2, l3).
 
-  extends(s, s) :- extends(s, _); extends(_, s).
-  extends(s1, s3) :- extends(s1, s2), extends(s2, s3).
-
-  proves(l, ax) :- dec_proves(l, ax).
   proves(l, ax) :- extends(l, l0), proves(l0, ax).
-  proves(l, ax) :- dec_ax_implies_over(l0, ax0, ax), extends(l, l0), proves(l, ax0).
+  proves(l, ax) :- ax_implies_over(l0, ax0, ax), extends(l, l0), proves(l, ax0).
 
-  extends(l, l0), proves(l, ax) :- dec_ext(l, l0, ax).
-  extends(l1, l) :- dec_ext(l, l0, ax), extends(l1, l0), proves(l1, ax).
+  extends(l, l0), proves(l, ax) :- ext(l, l0, ax).
+  extends(l1, l) :- ext(l, l0, ax), extends(l1, l0), proves(l1, ax).
 }
 
 .init CongLogs = CongLogsComp
 
-.input CongLogs.dec_ext(filename="core/cong_ext.csv", rfc4180=true)
-.input CongLogs.dec_proves(filename="core/proves.csv", rfc4180=true)
-.input CongLogs.dec_ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true)
+.decl _ext(l : symbol, l0 : symbol, ax : symbol)
+.input _ext(filename="core/cong_ext.csv", rfc4180=true, headers=true)
+CongLogs.ext($L(l), $L(l0), $A(ax)) :- _ext(l, l0, ax).
+
+.decl _proves(l : symbol, ax : symbol)
+.input _proves(filename="core/proves.csv", rfc4180=true, headers=true)
+CongLogs.proves($L(l), $A(ax)) :- _proves(l, ax).
+
+.decl _ax_implies_over(l : symbol, ax1 : symbol, ax2 : symbol)
+.input _ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true, headers=true)
+CongLogs.ax_implies_over($L(l), $A(ax1), $A(ax2)) :- _ax_implies_over(l, ax1, ax2).
 
 // Extra declarations
 
-CongLogs.dec("E").
+CongLogs.dec($L("E")).
 
-CongLogs.dec_proves("Fm", ax) :- Axioms.is(ax).
+CongLogs.proves($L("Fm"), ax) :- Axioms.is(ax).
 
-CongLogs.dec_ax_implies_over("E", ax1, ax2)
+CongLogs.ax_implies_over($L("E"), ax1, ax2)
   :- Axioms.is_alt(ax1, n1), Axioms.is_alt(ax2, n2), n1 < n2.
 
 // Extra checks
 
-warnings("Two logics are equal: " + l1 + ", " + l2)
+warnings("Two logics are equal: " + n1 + ", " + n2)
   :- CongLogs.is(l1), CongLogs.is(l2),
-    l1 != l2, CongLogs.equiv(l1, l2).
+    l1 != l2, CongLogs.equiv(l1, l2), l1=$L(n1), l2=$L(n2).
 
 // Makinson's theorem: for every logic Λ ⊇ K one of the following holds:
 //   - Λ ⊆ Triv
 //   - Λ ⊆ Ver
 //   - Λ |- ⊥
-warnings("Unable to check Makinson's theorem for the logic " + l)
-  :- CongLogs.is(l), CongLogs.extends(l, "K"),
-      !CongLogs.extends("Triv", l), !CongLogs.extends("Ver", l), !CongLogs.proves(l,"Contr").
+warnings("Unable to check Makinson's theorem for the logic " + n)
+  :- CongLogs.is(l), CongLogs.extends(l, $L("K")),
+      !CongLogs.extends($L("Triv"), l), !CongLogs.extends($L("Ver"), l),
+      !CongLogs.proves(l, $A("Contr")),
+      l = $L(n).
