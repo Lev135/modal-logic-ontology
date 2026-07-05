@@ -1,8 +1,23 @@
 from graphviz import Digraph
+from collections import defaultdict
 import csv
 
 dot = Digraph(comment='Graph', format='png')
-dot.attr(rankdir='BT', nodesep='0.5')
+dot.attr(
+    rankdir='BT',
+    nodesep='0.5',
+    ranksep='0.8',
+    mclimit='15.0',
+    newrank='true',
+    # concentrate='true'
+)
+
+dot.attr('edge',
+    color='#000000C0',
+    # penwidth='1.0',
+    arrowsize='0.8',
+    arrowhead='vee'
+)
 
 with open('out/node.csv', 'r') as f:
     for name, color in csv.reader(f):
