@@ -3,11 +3,11 @@
 .type color <: symbol
 
 .decl show(l : Logic, name : symbol)
-show($L(name), name) :- CongLogs.is($L(name)).
+show(l, name) :- CongLogs.dec(l), l = $L(name).
 
 .decl node(l : symbol, c : color)
 node(n, "green") :- show(l, n), Complexity.in($SAT(l, $Inf()), $coNP()).
-node(n, "yellow") :- show(l, n), Complexity.r.complete($SAT(l, $Inf()), $PSpace()).
+node(n, "yellow") :- show(l, n), Complexity.r_complete($SAT(l, $Inf()), $PSpace()).
 node(n, "orange") :- show(l, n), Complexity.hard($SAT(l, $Inf()), $PSpace()),
   !Complexity.in($SAT(l, $Inf()), $PSpace()).
 node(n, "white") :- show(l, n), !Complexity.in($SAT(l, $Inf()), $coNP()),

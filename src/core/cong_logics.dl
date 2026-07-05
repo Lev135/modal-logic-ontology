@@ -7,6 +7,7 @@
 
 .comp CongLogsComp {
   .decl dec(l : Logic)
+  .output dec(filename="declared/$L.csv")
 
   .decl ext(l : Logic, l0 : Logic, ax : Axiom)
   dec(l) :- ext(l, _, _).
@@ -15,17 +16,13 @@
 
   .decl ax_implies_over(l : Logic, ax1 : Axiom, ax2 : Axiom)
 
-  .decl is(l : Logic)
-  is(l) :- dec(l).
-  .output is(filename="declared/$L.csv")
-
-  .decl equiv(l1 : Logic, l2 : Logic)
-  equiv(l1, l2) :- extends(l1, l2), extends(l2, l1).
+  .decl r_equiv(l1 : Logic, l2 : Logic)
+  r_equiv(l1, l2) :- extends(l1, l2), extends(l2, l1).
 
   .decl extends(l1 : Logic, l2 : Logic)
   .decl proves(l : Logic, ax : Axiom)
 
-  extends(l, l) :- is(l).
+  extends(l, l) :- dec(l).
   extends(l1, l3) :- extends(l1, l2), extends(l2, l3).
 
   proves(l, ax) :- extends(l, l0), proves(l0, ax).
@@ -53,23 +50,23 @@ CongLogs.ax_implies_over($L(l), $A(ax1), $A(ax2)) :- _ax_implies_over(l, ax1, ax
 
 CongLogs.dec($L("E")).
 
-CongLogs.proves($L("Fm"), ax) :- Axioms.is(ax).
+CongLogs.proves($L("Fm"), ax) :- Axioms.dec(ax).
 
 CongLogs.ax_implies_over($L("E"), ax1, ax2)
-  :- Axioms.is_alt(ax1, n1), Axioms.is_alt(ax2, n2), n1 < n2.
+  :- Axioms.alt(ax1, n1), Axioms.alt(ax2, n2), n1 < n2.
 
 // Extra checks
 
 warnings("Two logics are equal: " + n1 + ", " + n2)
-  :- CongLogs.is(l1), CongLogs.is(l2),
-    l1 != l2, CongLogs.equiv(l1, l2), l1=$L(n1), l2=$L(n2).
+  :- CongLogs.dec(l1), CongLogs.dec(l2),
+    l1 != l2, CongLogs.r_equiv(l1, l2), l1=$L(n1), l2=$L(n2).
 
 // Makinson's theorem: for every logic Λ ⊇ K one of the following holds:
 //   - Λ ⊆ Triv
 //   - Λ ⊆ Ver
 //   - Λ |- ⊥
 warnings("Unable to check Makinson's theorem for the logic " + n)
-  :- CongLogs.is(l), CongLogs.extends(l, $L("K")),
+  :- CongLogs.dec(l), CongLogs.extends(l, $L("K")),
       !CongLogs.extends($L("Triv"), l), !CongLogs.extends($L("Ver"), l),
       !CongLogs.proves(l, $A("Contr")),
       l = $L(n).

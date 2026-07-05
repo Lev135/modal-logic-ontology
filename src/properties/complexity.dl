@@ -3,45 +3,41 @@
 .type CompC = P {} | NP {} | coNP {} | PSpace {} | ExpTime {} | ExpSpace {} | Decidable {}
 
 .comp ComplexityComp<T> {
-  .decl in(t : T, cc : CompC)
-  .decl hard(t : T, cc : CompC)
+  .decl less(cc1 : CompC, cc2 : CompC)
+  less($P(), $NP()).
+  less($P(), $coNP()).
+  less($NP(), $PSpace()).
+  less($coNP(), $PSpace()).
+  less($PSpace(), $ExpTime()).
+  less($ExpTime(), $ExpSpace()).
+  less($ExpSpace(), $Decidable()).
+  less(cc1, cc3) :- less(cc1, cc2), less(cc2, cc3).
+
   .decl simpler(t1 : T, t2 : T)
 
-  .comp R<T> {
-    .decl less(cc1 : CompC, cc2 : CompC)
-    .decl complete(t : T, cc : CompC)
+  .decl in(t : T, cc : CompC)
+  in(t, cc2) :- in(t, cc1), less(cc1, cc2).
+  in(t1, cc) :- in(t2, cc), simpler(t1, t2).
 
-    less($P(), $NP()).
-    less($P(), $coNP()).
-    less($NP(), $PSpace()).
-    less($coNP(), $PSpace()).
-    less($PSpace(), $ExpTime()).
-    less($ExpTime(), $ExpSpace()).
-    less($ExpSpace(), $Decidable()).
-    less(cc1, cc3) :- less(cc1, cc2), less(cc2, cc3).
+  .decl hard(t : T, cc : CompC)
+  hard(t, cc1) :- hard(t, cc2), less(cc1, cc2).
+  hard(t2, cc) :- hard(t1, cc), simpler(t1, t2).
 
-    in(t, cc2) :- in(t, cc1), less(cc1, cc2).
-    hard(t, cc1) :- hard(t, cc2), less(cc1, cc2).
-
-    in(t1, cc) :- in(t2, cc), simpler(t1, t2).
-    hard(t2, cc) :- hard(t1, cc), simpler(t1, t2).
-
-    complete(t, cc) :- in(t, cc), hard(t, cc).
-  }
-  .init r = R<T>
+  .decl r_complete(t : T, cc : CompC)
+  r_complete(t, cc) :- in(t, cc), hard(t, cc).
 }
 
 .type Task = SAT { l : Logic, vars : InfUnsigned }
 
 .init Complexity = ComplexityComp<Task>
 
-Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- CongLogs.is(l), inf_less(n1, n2).
+Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- CongLogs.dec(l), inf_less(n1, n2).
 
-Complexity.hard($SAT(l, $Inf()), $coNP()) :- CongLogs.is(l).
+Complexity.hard($SAT(l, $Inf()), $coNP()) :- CongLogs.dec(l).
 Complexity.hard($SAT(l, $Inf()), $PSpace())
-  :- CongLogs.is(l), CongLogs.extends($L("GL"), l), CongLogs.extends(l, $L("K")).
+  :- CongLogs.dec(l), CongLogs.extends($L("GL"), l), CongLogs.extends(l, $L("K")).
 Complexity.hard($SAT(l, $Inf()), $PSpace())
-  :- CongLogs.is(l), CongLogs.extends($L("Grz"), l), CongLogs.extends(l, $L("K")).
+  :- CongLogs.dec(l), CongLogs.extends($L("Grz"), l), CongLogs.extends(l, $L("K")).
 Complexity.hard($SAT($L("EC"), $Inf()), $PSpace()).
 Complexity.in($SAT(l, $Inf()), $coNP()) :- l = $L("EM"); l = $L("EMD"); l = $L("E"); l = $L("EMP").
 Complexity.in($SAT(l, $Inf()), $PSpace()) :- l = $L("K"); l = $L("KD"); l = $L("GL").

@@ -7,22 +7,22 @@
 .type Axiom = A { ax_name : symbol }
 
 .comp AxiomsComp {
-  .decl dec(ax : Axiom, f : formula)
+  .decl dec(ax : Axiom)
+  .output dec(filename="declared/$A.csv")
+
+  .decl ax_form(ax : Axiom, f : formula)
+  dec(ax) :- ax_form(ax, _).
   errors("Axiom declared twice: " + n)
-    :- dec(ax, f1), dec(ax, f2), f1 != f2, ax = $A(n).
+    :- ax_form(ax, f1), ax_form(ax, f2), f1 != f2, ax = $A(n).
 
-  .decl is(ax : Axiom)
-  .output is(filename="declared/$A.csv")
-  is(ax) :- dec(ax, _).
-
-  .decl is_alt(ax : Axiom, n : unsigned)
+  .decl alt(ax : Axiom, n : unsigned)
 }
 
 .init Axioms = AxiomsComp
 
-.decl _axiom_dec(ax : symbol, f : formula)
-.input _axiom_dec(filename="core/axiom_formula.csv", rfc4180=true, headers=true)
-Axioms.dec($A(ax), f) :- _axiom_dec(ax, f).
+.decl _ax_form(ax : symbol, f : formula)
+.input _ax_form(filename="core/axiom_formula.csv", rfc4180=true, headers=true)
+Axioms.ax_form($A(ax), f) :- _ax_form(ax, f).
 
-Axioms.is_alt($A("Alt₁"), 1).
-Axioms.is_alt($A("Alt₂"), 2).
+Axioms.alt($A("Alt₁"), 1).
+Axioms.alt($A("Alt₂"), 2).
