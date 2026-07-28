@@ -1,3 +1,4 @@
+#pragma once
 #include "../core/cong_logics.dl"
 
 .type CompC = P {} | NP {} | coNP {} | PSpace {} | ExpTime {} | ExpSpace {} | Decidable {}

@@ -1,15 +1,14 @@
+#pragma once
 #include "../core/cong_logics.dl"
 
 .comp InterpolationComp {
-  .decl sat_CIP(l : Logic)
-  .decl sat_LIP(l : Logic)
-  .decl nsat_CIP(l : Logic)
-  .decl nsat_LIP(l : Logic)
+  .decl CIP(l : Logic, b : Bool3)
+  .decl LIP(l : Logic, b : Bool3)
 
-  sat_CIP(l) :- sat_LIP(l).
-  nsat_LIP(l) :- nsat_CIP(l).
+  CIP(l, $True()) :- LIP(l, $True()).
+  LIP(l, $False()) :- CIP(l, $False()).
 }
 .init Interpolation = InterpolationComp
 
-Interpolation.nsat_CIP($L("K4.3")).
-Interpolation.sat_LIP($L("K")).
+Interpolation.CIP($L("K4.3"), $False()).
+Interpolation.LIP($L("K"), $True()).

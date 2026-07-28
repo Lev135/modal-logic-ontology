@@ -14,3 +14,6 @@ is_num(0). is_num(1). is_num(2).
 .decl inf_less(n1 : InfUnsigned, n2 : InfUnsigned)
 inf_less($Unsigned(n), $Inf()) :- is_num(n).
 inf_less($Unsigned(n1), $Unsigned(n2)) :- n1 < n2, is_num(n1), is_num(n2).
+
+// Unknown {} is used for properties which are stated somewhere as open problems
+.type Bool3 = True {} | False {} | Unknown {}
