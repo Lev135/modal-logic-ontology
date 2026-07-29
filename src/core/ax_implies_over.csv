@@ -11,3 +11,7 @@ EN,Alt₁,.2
 E,Alt₁,.3
 KT,Alt₂,.2
 KT,Alt₂,.3
+K,Bw₁,.3
+K,.3,Bw₁
+K,Bd₁,B
+K,B,Bd₁

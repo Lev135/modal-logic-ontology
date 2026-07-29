@@ -15,6 +15,20 @@
     :- ext($L(l), l01, ax1), ext($L(l), l02, ax2), (l01 != l02 ; ax1 != ax2).
 
   .decl ax_implies_over(l : Logic, ax1 : Axiom, ax2 : Axiom)
+  ax_implies_over(l, ax1, ax3) :- ax_implies_over(l, ax1, ax2), ax_implies_over(l, ax2, ax3).
+  ax_implies_over(l, ax1, ax2) :- ax_implies_over(l0, ax1, ax2), extends(l, l0).
+
+  .decl r_ax_equiv_over(l : Logic, ax1 : Axiom, ax2 : Axiom)
+  r_ax_equiv_over(l, ax1, ax2) :- ax_implies_over(l, ax1, ax2), ax_implies_over(l, ax2, ax1).
+  r_ax_equiv_over(l, ax, ax) :- dec(l), Axioms.dec(ax).
+
+  .decl r_extension(l : Logic, l0 : Logic, ax : Axiom)
+  r_extension(l, l0, ax1) :- ext(l, l0, ax2), r_ax_equiv_over(l0, ax1, ax2).
+  // (l0 + ax1) + ax2 = (l0 + ax2) + ax1
+  r_extension(l, l2, ax1) :-
+    r_extension(l, l1, ax2),
+    r_extension(l1, l0, ax1),
+    r_extension(l2, l0, ax2).
 
   .decl r_equiv(l1 : Logic, l2 : Logic)
   r_equiv(l1, l2) :- extends(l1, l2), extends(l2, l1).

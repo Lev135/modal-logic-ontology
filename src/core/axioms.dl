@@ -16,6 +16,8 @@
     :- ax_form(ax, f1), ax_form(ax, f2), f1 != f2, ax = $A(n).
 
   .decl alt(ax : Axiom, n : unsigned)
+  .decl bd(ax : Axiom, n : unsigned)
+  .decl bw(ax : Axiom, n : unsigned)
 }
 
 .init Axioms = AxiomsComp
@@ -26,3 +28,9 @@ Axioms.ax_form($A(ax), f) :- _ax_form(ax, f).
 
 Axioms.alt($A("Alt₁"), 1).
 Axioms.alt($A("Alt₂"), 2).
+
+Axioms.bd($A("Bd₁"), 1).
+Axioms.bd($A("Bd₂"), 2).
+
+Axioms.bw($A("Bw₁"), 1).
+Axioms.bw($A("Bw₂"), 1).

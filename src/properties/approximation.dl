@@ -15,7 +15,7 @@
   approximable(l, $Constant()) :- tabular(l).
 
   .decl approximable(l : Logic, s : Size)
-  approximable(l, s1) :- approximable(l, s2), less(s1, s2).
+  approximable(l, s2) :- approximable(l, s1), less(s1, s2).
 
   .decl hereditary_approximable(l : Logic, s : Size)
   approximable(l1, s) :- hereditary_approximable(l2, s), CongLogs.extends(l1, l2).
@@ -25,3 +25,15 @@
 
 // ChZa Theorem 18.14
 Approximation.hereditary_approximable($L("S4.3"), $Polynomial()).
+// ChZa Theorem 18.12
+Approximation.approximable(l, $Polynomial())
+  :- CongLogs.r_extension(l, l0, bd), Axioms.bd(bd, _),
+    (l0 = $L("K4"); l0 = $L("S4"); l0 = $L("Grz"); l0 = $L("GL")).
+// ChZa Theorem 18.13
+Approximation.approximable(l, $Linear())
+  :- CongLogs.r_extension(l, l0, bw), Axioms.bw(bw, _),
+    (l0 = $L("K4"); l0 = $L("S4"); l0 = $L("Grz"); l0 = $L("GL")).
+// Every extension of a tabular logic is tabular
+Approximation.tabular(l) :- Approximation.tabular(l0), CongLogs.extends(l, l0).
+// KTᵈ is the logic of {◯, ⬤}
+Approximation.tabular($L("KTᵈ")).
