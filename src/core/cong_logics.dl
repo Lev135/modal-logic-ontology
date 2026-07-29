@@ -30,6 +30,16 @@
     r_extension(l1, l0, ax1),
     r_extension(l2, l0, ax2).
 
+  .decl _r_extension_by_some_of(l : Logic, l0 : Logic, axs : AxList)
+  _r_extension_by_some_of(l, l, axs) :- dec(l), Axioms.dec_list(axs).
+  _r_extension_by_some_of(l, l0, axs) :- Axioms.dec_list(axs), axs = [ax, axs1],
+    r_extension(l, l1, ax), _r_extension_by_some_of(l1, l0, axs1).
+  _r_extension_by_some_of(l, l0, axs) :- Axioms.dec_list(axs), axs = [_, axs1],
+    _r_extension_by_some_of(l, l0, axs1).
+  .decl r_extension_by_some_of(l : Logic, l0 : Logic, axs : axListName)
+  r_extension_by_some_of(l, l0, name)
+    :- _r_extension_by_some_of(l, l0, axs), Axioms.named_list(axs, name).
+
   .decl r_equiv(l1 : Logic, l2 : Logic)
   r_equiv(l1, l2) :- extends(l1, l2), extends(l2, l1).
 

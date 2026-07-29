@@ -75,5 +75,18 @@ Complexity.in($SAT(l, $Fin(1)), $P())
 // Every polynomially approximable logic is coNP-decidable TODO: reference???
 Complexity.in($SAT(l, $Inf()), $coNP()) :- Approximation.approximable(l, $Polynomial()).
 
+// This result follows from my unpublished material. Of course, for some logics,
+// like K, K4, S4, etc. we could provide references, but I don't know about others
+// TODO: add appropriate citations
+Axioms.named_list([$A("T"), [$A("D"), [$A("B"), nil]]], "TDB").
+Complexity.in($SAT(l, $Inf()), $PSpace())
+  :- CongLogs.r_extension_by_some_of(l, $L("K"), "TDB").
+Axioms.named_list([$A("T"), [$A("D"), [$A(".1"), [$A(".2"), nil]]]], "TD.1.2").
+Complexity.in($SAT(l, $Inf()), $PSpace())
+  :- CongLogs.r_extension_by_some_of(l, $L("K4"), "TD.1.2").
+Complexity.in($SAT($L("wK4"), $Inf()), $PSpace()).
+Complexity.in($SAT(l, $Inf()), $PSpace())
+  :- l = $L("GL"); l = $L("Grz"); l = $L("GL.2"); l = $L("Grz.2").
+
 // Complexity.in($SAT(l, $Inf()), $coNP()) :- l = $L("EM"); l = $L("EMD"); l = $L("E"); l = $L("EMP").
 // Complexity.in($SAT(l, $Inf()), $PSpace()) :- l = $L("K"); l = $L("KD"); l = $L("GL").

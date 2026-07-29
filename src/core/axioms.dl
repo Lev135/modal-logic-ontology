@@ -5,10 +5,17 @@
 .type formula <: symbol
 // Axiom name wrapped in ADT
 .type Axiom = A { ax_name : symbol }
+.type AxList = [head : Axiom, tail : AxList]
+.type axListName <: symbol
 
 .comp AxiomsComp {
   .decl dec(ax : Axiom)
   .output dec(filename="declared/$A.csv")
+
+  .decl dec_list(axs : AxList)
+  dec_list(axs) :- dec_list([_, axs]).
+  .decl named_list(axs : AxList, name : axListName)
+  dec_list(axs) :- named_list(axs, _).
 
   .decl ax_form(ax : Axiom, f : formula)
   dec(ax) :- ax_form(ax, _).
