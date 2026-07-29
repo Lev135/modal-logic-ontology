@@ -1,0 +1,11 @@
+#include "./utils.dl"
+
+.init all_logics = VizComp
+
+all_logics.show(l) :- CongLogs.dec(l).
+
+all_logics.logic_category(l, "normal") :- CongLogs.extends(l, $L("K")).
+
+.output all_logics.out_node(filename="all_logics/node.csv", rfc4180=true)
+.output all_logics.out_category(filename="all_logics/category.csv", rfc4180=true)
+.output all_logics.out_edge(filename="all_logics/edge.csv", rfc4180=true)

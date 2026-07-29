@@ -8,13 +8,16 @@ clean:
 souffle:
 	@mkdir -p out/
 	@mkdir -p out/declared/
+	@mkdir -p out/all_logics/
+	@mkdir -p out/norm_approximation/
+	@mkdir -p out/norm_complexity/
 	souffle src/$(FILE) -F src/ -D out/
 	python3 scripts/checker.py
 
 viz: souffle
 	python3 scripts/viz.py
 
-viz: FILE=viz.dl
+viz: FILE=viz/main.dl
 
 
 help:

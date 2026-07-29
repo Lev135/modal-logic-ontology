@@ -1,0 +1,30 @@
+#include "./utils.dl"
+#include "../properties/approximation.dl"
+
+.init norm_approximation = VizComp
+
+norm_approximation.show(l) :- CongLogs.extends(l, $L("K")).
+
+norm_approximation.hide($L("Fm")).
+
+
+.decl size_name(s : Size, ss : symbol)
+size_name($Finite(), "finite").
+size_name($Exponential(), "exponential").
+size_name($Polynomial(), "polynomial").
+size_name($Linear(), "linear").
+size_name($Constant(), "constant").
+
+norm_approximation.logic_category(l, ss)
+  :- size_name(s, ss),
+    Approximation.approximable(l, s), !less_approximable(l, s, _).
+
+.decl less_approximable(l : Logic, s0 : Size, s : Size)
+less_approximable(l, s0, s)
+  :- Approximation.approximable(l, s), Approximation.less(s, s0).
+
+
+
+.output norm_approximation.out_node(filename="norm_approximation/node.csv", rfc4180=true)
+.output norm_approximation.out_category(filename="norm_approximation/category.csv", rfc4180=true)
+.output norm_approximation.out_edge(filename="norm_approximation/edge.csv", rfc4180=true)

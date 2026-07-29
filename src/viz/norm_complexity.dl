@@ -1,0 +1,22 @@
+#include "./utils.dl"
+#include "../properties/complexity.dl"
+
+.init norm_complexity = VizComp
+
+norm_complexity.show(l) :- CongLogs.extends(l, $L("K")).
+norm_complexity.hide($L("Fm")).
+
+norm_complexity.logic_category(l, "coNP decidable")
+  :- Complexity.in($SAT(l, $Inf()), $coNP()).
+norm_complexity.logic_category(l, "PSpace decidable")
+  :- Complexity.in($SAT(l, $Inf()), $PSpace()), !Complexity.in($SAT(l, $Inf()), $coNP()).
+norm_complexity.logic_category(l, "PSpace hard in " + to_string(n) + " variables")
+  :- Complexity.hard($SAT(l, $Fin(n)), $PSpace()), !hard_less(l, $Fin(n), $PSpace()).
+
+.decl hard_less(l : Logic, n : InfUnsigned, c : CompC)
+hard_less(l, n, c) :- Complexity.hard($SAT(l, m), c), inf_less(m, n).
+
+
+.output norm_complexity.out_node(filename="norm_complexity/node.csv", rfc4180=true)
+.output norm_complexity.out_category(filename="norm_complexity/category.csv", rfc4180=true)
+.output norm_complexity.out_edge(filename="norm_complexity/edge.csv", rfc4180=true)

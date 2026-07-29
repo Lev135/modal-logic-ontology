@@ -1,0 +1,3 @@
+#include "./all_logics.dl"
+#include "./norm_approximation.dl"
+#include "./norm_complexity.dl"
