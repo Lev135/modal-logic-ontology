@@ -14,6 +14,10 @@
   tabular(l) :- approximable(l, $Constant()).
   approximable(l, $Constant()) :- tabular(l).
 
+  .decl fmp(l : Logic)
+  fmp(l) :- approximable(l, $Finite()).
+  approximable(l, $Finite()) :- fmp(l).
+
   .decl approximable(l : Logic, s : Size)
   approximable(l, s2) :- approximable(l, s1), less(s1, s2).
 

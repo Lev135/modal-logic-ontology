@@ -27,6 +27,10 @@
 
   .decl r_complete(t : T, cc : CompC)
   r_complete(t, cc) :- in(t, cc), hard(t, cc).
+
+  .decl decidable(t : T)
+  decidable(t) :- in(t, $Decidable()).
+  in(t, $Decidable()) :- decidable(t).
 }
 
 .type Task = SAT { l : Logic, vars : InfUnsigned }
@@ -37,6 +41,9 @@ Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- CongLogs.dec(l), inf_less(n1, n2
 
 // Every logic with infinitely many variables is coNP-hard
 Complexity.hard($SAT(l, $Inf()), $coNP()) :- CongLogs.dec(l).
+
+// Harrop's theorem
+Complexity.decidable($SAT(l, $Inf())) :- Approximation.fmp(l), CongLogs.r_fin_axiomaizable(l).
 
 // Lower bounds
 

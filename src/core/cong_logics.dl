@@ -40,6 +40,9 @@
   r_extension_by_some_of(l, l0, name)
     :- _r_extension_by_some_of(l, l0, axs), Axioms.named_list(axs, name).
 
+  .decl r_fin_axiomaizable(l : Logic)
+  r_fin_axiomaizable(l) :- ext(l, l0, _), r_fin_axiomaizable(l0).
+
   .decl r_equiv(l1 : Logic, l2 : Logic)
   r_equiv(l1, l2) :- extends(l1, l2), extends(l2, l1).
 
@@ -76,6 +79,7 @@ CongLogs.ax_implies_over($L(l), $A(ax1), $A(ax2)) :- _ax_implies_over(l, ax1, ax
 // Extra declarations
 
 CongLogs.dec($L("E")).
+CongLogs.r_fin_axiomaizable($L("E")).
 
 CongLogs.proves($L("Fm"), ax) :- Axioms.dec(ax).
 
