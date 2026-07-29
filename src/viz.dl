@@ -15,7 +15,7 @@ color_def(l, c) :- l_color(l, c).
 color_def(l, "white") :- CongLogs.dec(l), !l_color(l, _).
 
 .decl show(l : Logic, n : symbol)
-show(l, n) :- CongLogs.dec(l), l = $L(n).
+show(l, n) :- CongLogs.dec(l), l = $L(n), CongLogs.extends(l, $L("K")).
 
 .decl node(n : symbol, c : color)
 node(n, c) :- show(l, n), color_def(l, c).

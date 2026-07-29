@@ -19,6 +19,9 @@
   .decl r_equiv(l1 : Logic, l2 : Logic)
   r_equiv(l1, l2) :- extends(l1, l2), extends(l2, l1).
 
+  .decl r_between(l_upper : Logic, l : Logic, l_lower : Logic)
+  r_between(l_upper, l, l_lower) :- extends(l_upper, l), extends(l, l_lower).
+
   .decl extends(l1 : Logic, l2 : Logic)
   .decl proves(l : Logic, ax : Axiom)
 

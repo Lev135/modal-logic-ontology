@@ -1,0 +1,27 @@
+#pragma once
+#include "../core/cong_logics.dl"
+
+.type Size = Finite{} | Exponential{} | Polynomial{} | Linear{} | Constant{}
+
+.comp ApproximationComp {
+  .decl less(s1 : Size, s2 : Size)
+  less($Exponential(), $Finite()).
+  less($Polynomial(), $Exponential()).
+  less($Linear(), $Polynomial()).
+  less($Constant(), $Linear()).
+
+  .decl tabular(l : Logic)
+  tabular(l) :- approximable(l, $Constant()).
+  approximable(l, $Constant()) :- tabular(l).
+
+  .decl approximable(l : Logic, s : Size)
+  approximable(l, s1) :- approximable(l, s2), less(s1, s2).
+
+  .decl hereditary_approximable(l : Logic, s : Size)
+  approximable(l1, s) :- hereditary_approximable(l2, s), CongLogs.extends(l1, l2).
+}
+
+.init Approximation = ApproximationComp
+
+// ChZa Theorem 18.14
+Approximation.hereditary_approximable($L("S4.3"), $Polynomial()).

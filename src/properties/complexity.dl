@@ -1,5 +1,6 @@
 #pragma once
 #include "../core/cong_logics.dl"
+#include "./approximation.dl"
 
 .type CompC = P {} | NP {} | coNP {} | PSpace {} | ExpTime {} | ExpSpace {} | Decidable {}
 
@@ -34,11 +35,45 @@
 
 Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- CongLogs.dec(l), inf_less(n1, n2).
 
+// Every logic with infinitely many variables is coNP-hard
 Complexity.hard($SAT(l, $Inf()), $coNP()) :- CongLogs.dec(l).
-Complexity.hard($SAT(l, $Inf()), $PSpace())
-  :- CongLogs.dec(l), CongLogs.extends($L("GL"), l), CongLogs.extends(l, $L("K")).
-Complexity.hard($SAT(l, $Inf()), $PSpace())
-  :- CongLogs.dec(l), CongLogs.extends($L("Grz"), l), CongLogs.extends(l, $L("K")).
-Complexity.hard($SAT($L("EC"), $Inf()), $PSpace()).
-Complexity.in($SAT(l, $Inf()), $coNP()) :- l = $L("EM"); l = $L("EMD"); l = $L("E"); l = $L("EMP").
-Complexity.in($SAT(l, $Inf()), $PSpace()) :- l = $L("K"); l = $L("KD"); l = $L("GL").
+
+// Lower bounds
+
+// https://doi.org/10.1093/jigpal/jzy018
+Complexity.hard($SAT(l, $Fin(1)), $PSpace())
+  :- CongLogs.r_between($L("KTB"), l, $L("K")).
+// http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 3
+Complexity.hard($SAT(l, $Fin(0)), $PSpace())
+  :- CongLogs.r_between($L("K4"), l, $L("K")).
+// http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 8
+Complexity.hard($SAT(l, $Fin(1)), $PSpace())
+  :- CongLogs.r_between($L("GL"), l, $L("K")) ; CongLogs.r_between($L("Grz"), l, $L("K")).
+// http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 10
+Complexity.hard($SAT($L("GL.3"), $Fin(1)), $NP()).
+// http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 12
+Complexity.hard($SAT(l, $Fin(1)), $coNP())
+  :- l = $L("S4.3") ; l = $L("Grz.3").
+// https://arxiv.org/pdf/2507.12343 Theorem 1
+Complexity.hard($SAT(l, $Fin(2)), $PSpace())
+  :- CongLogs.r_between($L("Grz.2"), l, $L("K")).
+// https://arxiv.org/pdf/2507.12343 Theorem 2
+Complexity.hard($SAT(l, $Fin(1)), $PSpace())
+  :- CongLogs.r_between($L("GL.2"), l, $L("K")).
+
+
+
+// Complexity.hard($SAT($L("EC"), $Inf()), $PSpace()).
+
+// Upper bounds
+
+// http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 9 (known before?)
+Complexity.in($SAT($L("GL"), $Fin(0)), $P()).
+// http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 11
+Complexity.in($SAT(l, $Fin(1)), $P())
+  :- l = $L("S4.3") ; l = $L("Grz.3").
+// Every polynomially approximable logic is coNP-decidable TODO: reference???
+Complexity.in($SAT(l, $Inf()), $coNP()) :- Approximation.approximable(l, $Polynomial()).
+
+// Complexity.in($SAT(l, $Inf()), $coNP()) :- l = $L("EM"); l = $L("EMD"); l = $L("E"); l = $L("EMP").
+// Complexity.in($SAT(l, $Inf()), $PSpace()) :- l = $L("K"); l = $L("KD"); l = $L("GL").
