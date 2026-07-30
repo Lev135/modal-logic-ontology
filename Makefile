@@ -12,6 +12,12 @@ souffle:
 	@mkdir -p out/norm_approximation/
 	@mkdir -p out/norm_complexity/
 	souffle src/$(FILE) -F src/ -D out/
+	@echo "Sorting all CSV files in out/ and its subdirectories..."
+	@find out -type f -name "*.csv" -exec sh -c ' \
+		for file do \
+			echo "Sorting $$file..."; \
+			sort -o "$$file" "$$file"; \
+		done' _ {} +
 	python3 scripts/checker.py
 
 viz: souffle
