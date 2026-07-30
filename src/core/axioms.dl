@@ -22,6 +22,10 @@
   errors("Axiom declared twice: " + n)
     :- ax_form(ax, f1), ax_form(ax, f2), f1 != f2, ax = $A(n).
 
+  .decl subframe_hereditary(ax : Axiom)
+  .decl cofinal_subframe_hereditary(ax : Axiom)
+  cofinal_subframe_hereditary(ax) :- subframe_hereditary(ax).
+
   .decl alt(ax : Axiom, n : unsigned)
   .decl bd(ax : Axiom, n : unsigned)
   .decl bw(ax : Axiom, n : unsigned)
@@ -29,9 +33,13 @@
 
 .init Axioms = AxiomsComp
 
-.decl _ax_form(ax : symbol, f : formula)
-.input _ax_form(filename="core/axiom_formula.csv", rfc4180=true, headers=true)
-Axioms.ax_form($A(ax), f) :- _ax_form(ax, f).
+.decl _axioms(ax : symbol, is_subframe_hereditary : symbol, f : formula)
+.input _axioms(filename="core/axioms.csv", rfc4180=true, headers=true)
+Axioms.ax_form($A(ax), f) :- _axioms(ax, _, f).
+Axioms.subframe_hereditary($A(ax)) :- _axioms(ax, "yes", _).
+Axioms.cofinal_subframe_hereditary($A(ax)) :- _axioms(ax, "cofinal", _).
+Axioms.subframe_hereditary(ax)
+  :- Axioms.alt(ax, _), Axioms.bd(ax, _), Axioms.bw(ax, _).
 
 Axioms.alt($A("Alt₁"), 1).
 Axioms.alt($A("Alt₂"), 2).

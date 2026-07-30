@@ -41,3 +41,7 @@ Approximation.approximable(l, $Linear())
 Approximation.tabular(l) :- Approximation.tabular(l0), CongLogs.extends(l, l0).
 // KTᵈ is the logic of {◯, ⬤}
 Approximation.tabular($L("KTᵈ")).
+// Generalization of Fine's theorem http://doi.org/10.1215/00294527-1306190
+Approximation.fmp(l)
+  :- CongLogs.extends(l, $L("wK4")),
+    CongLogs.cofinal_subframe_hereditary(l).

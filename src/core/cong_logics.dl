@@ -49,6 +49,15 @@
   .decl r_between(l_upper : Logic, l : Logic, l_lower : Logic)
   r_between(l_upper, l, l_lower) :- extends(l_upper, l), extends(l, l_lower).
 
+  .decl subframe_hereditary(l : Logic)
+  subframe_hereditary(l) :- r_extension(l, l0, ax),
+    subframe_hereditary(l0), Axioms.subframe_hereditary(ax).
+  subframe_hereditary($L("K")).
+  .decl cofinal_subframe_hereditary(l : Logic)
+  cofinal_subframe_hereditary(l) :- r_extension(l, l0, ax),
+    cofinal_subframe_hereditary(l0), Axioms.cofinal_subframe_hereditary(ax).
+  cofinal_subframe_hereditary(l) :- subframe_hereditary(l).
+
   .decl extends(l1 : Logic, l2 : Logic)
   .decl proves(l : Logic, ax : Axiom)
 

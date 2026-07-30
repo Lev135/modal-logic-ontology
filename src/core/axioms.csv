@@ -1,0 +1,27 @@
+$A,is subframe-hereditary,formula
+M,none,<>p-><>(p\/q)
+C,none,<>(p\/q)-><>p\/<>q
+N,none,[]t
+P,none,<>t
+Ver,yes,[]f
+Contr,yes,⊥
+D,cofinal,[]p-><>p
+4,yes,<><>p-><>p
+4*,yes,<>(p\/<>p)-><>p
+4ᵈ,false,<>p-><><>p
+4ʷ,yes,<><>p-><>p\/p
+T,yes,p-><>p
+Tᵈ,yes,<>p->p
+B,yes,p->[]<>p
+5,yes,<>p->[]<>p
+Lob,?,<>p-><>(p/\~<>p)
+Grz,?,<>p-><>(p/\[](<>p->p))
+.1,?,[]<>p-><>[]p
+.2,cofinal,<>([]p/\p)->[](<>p\/p)
+.3,yes,<>p/\<>q-><>(p/\q)\/<>(p/\<>q)\/<>(<>p/\q)
+Alt₁,_,<>p/\<>q-><>(p/\q)
+Alt₂,_,<>p/\<>q/\<>r-><>(p/\q)\/<>(q/\r)\/<>(p/\r)
+Bd₁,_,<>[]p_1->p_1
+Bd₂,_,<>([]p_2/\~Bd₁)->p_2
+Bw₁,_,<>p/\<>q-><>(p/\(q\/<>q))\/<>(q/\(p\/<>p))
+Bw₂,_,<>p_0/\<>p_1/\<>p_2->\\//_{0<=i!=j<=2}<>(p_i/\(p_j\/<>p_j))
