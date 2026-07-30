@@ -41,3 +41,6 @@ Approximation.tabular($L("KTᵈ")).
 Approximation.fmp(l)
   :- CongLogs.extends(l, $L("wK4")),
     CongLogs.cofinal_subframe_hereditary(l).
+// TODO reference??
+Approximation.approximable(l, $Polynomial())
+  :- CongLogs.extends(l, l0), (l0 = $L("KAlt₁"); l0 = $L("KTAlt₂")).
