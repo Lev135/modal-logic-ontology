@@ -79,7 +79,7 @@ def build_legend(set_colors, text_color, border_color):
     # Entries with internal padding via CELLPADDING
     for cat_set, color in sorted_sets:
         if not cat_set:
-            label = 'No category'
+            label = 'no category'
         else:
             label = ', '.join(cat_set)
             if len(label) > 30:
