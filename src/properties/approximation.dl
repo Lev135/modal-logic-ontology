@@ -1,14 +1,13 @@
 #pragma once
 #include "../core/cong_logics.dl"
 
-.type Size = Finite{} | Exponential{} | Polynomial{} | Linear{} | Constant{}
+.type Size = Finite{} | Exponential{} | Polynomial{} | Constant{}
 
 .comp ApproximationComp {
   .decl less(s1 : Size, s2 : Size)
   less($Exponential(), $Finite()).
   less($Polynomial(), $Exponential()).
-  less($Linear(), $Polynomial()).
-  less($Constant(), $Linear()).
+  less($Constant(), $Polynomial()).
 
   .decl tabular(l : Logic)
   tabular(l) :- approximable(l, $Constant()).
@@ -34,7 +33,7 @@ Approximation.approximable(l, $Polynomial())
   :- CongLogs.r_extension(l, l0, bd), Axioms.bd(bd, _),
     (l0 = $L("K4"); l0 = $L("S4"); l0 = $L("Grz"); l0 = $L("GL")).
 // ChZa Theorem 18.13
-Approximation.approximable(l, $Linear())
+Approximation.approximable(l, $Polynomial())
   :- CongLogs.r_extension(l, l0, bw), Axioms.bw(bw, _),
     (l0 = $L("K4"); l0 = $L("S4"); l0 = $L("Grz"); l0 = $L("GL")).
 // Every extension of a tabular logic is tabular

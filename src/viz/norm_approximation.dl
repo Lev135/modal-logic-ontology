@@ -10,7 +10,6 @@ norm_approximation.hide($L("Fm")).
 norm_approximation.category_name($Finite(), "finite").
 norm_approximation.category_name($Exponential(), "exponential").
 norm_approximation.category_name($Polynomial(), "polynomial").
-norm_approximation.category_name($Linear(), "linear").
 norm_approximation.category_name($Constant(), "constant").
 
 norm_approximation.logic_category(l, s) :- Approximation.approximable(l, s).
