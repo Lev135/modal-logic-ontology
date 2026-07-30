@@ -71,6 +71,39 @@ def get_palette(mode, n):
 
     return all_colors[:n]
 
+def build_legend(set_colors, text_color, border_color):
+    # Build legend as HTML table
+    sorted_sets = sorted(set_colors.items(), key=lambda x: str(x[0]))
+
+    rows = []
+    # Entries with internal padding via CELLPADDING
+    for cat_set, color in sorted_sets:
+        if not cat_set:
+            label = 'No category'
+        else:
+            label = ', '.join(cat_set)
+            if len(label) > 30:
+                parts = []
+                current = ''
+                for word in label.split(', '):
+                    if len(current) + len(word) > 30:
+                        parts.append(current)
+                        current = word
+                    else:
+                        current = current + ', ' + word if current else word
+                if current:
+                    parts.append(current)
+                label = '<BR/>'.join(parts)
+
+        color_cell = f'<TD BGCOLOR="{color}" WIDTH="25" HEIGHT="20" BORDER="1" CELLPADDING="5"> </TD>'
+        label_cell = f'<TD ALIGN="LEFT" CELLPADDING="5"><FONT COLOR="{text_color}">{label}</FONT></TD>'
+        rows.append(f'<TR>{color_cell}{label_cell}</TR>')
+
+    return f'''<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="13" COLOR="{border_color}">
+        {''.join(rows)}
+    </TABLE>>'''
+
+
 def process_directory(data_dir):
     """Process a single directory and generate both light and dark mode graphs."""
 
@@ -130,7 +163,7 @@ def process_directory(data_dir):
     for mode in ['light', 'dark']:
         set_colors = light_set_colors if mode == 'light' else dark_set_colors
         text_color = 'black' if mode == 'light' else 'white'
-        border_color = 'black' if mode == 'light' else 'white'
+        border_color = 'darkgrey' if mode == 'light' else 'lightgrey'
         edge_color = '#000000C0' if mode == 'light' else '#FFFFFFC0'
 
         # Create graph
@@ -172,53 +205,8 @@ def process_directory(data_dir):
                     dot.edge(src, dst)
 
         # Add legend
-        legend_border = 'lightgrey' if mode == 'dark' else 'grey'
-        legend_fontcolor = 'white' if mode == 'dark' else 'black'
-
-        with dot.subgraph(name='cluster_legend_padding') as c0:
-            c0.attr(
-                style='invisible',
-                margin='50'
-            )
-            with c0.subgraph(name='cluster_legend') as c:
-                c.attr(
-                    style='filled',
-                    color=legend_border,
-                    fillcolor='transparent',
-                    margin='10'
-                )
-
-                # Build legend as HTML table
-                sorted_sets = sorted(set_colors.items(), key=lambda x: str(x[0]))
-
-                rows = []
-                # Entries with internal padding via CELLPADDING
-                for cat_set, color in sorted_sets:
-                    if not cat_set:
-                        label = 'No category'
-                    else:
-                        label = ', '.join(cat_set)
-                        if len(label) > 30:
-                            parts = []
-                            current = ''
-                            for word in label.split(', '):
-                                if len(current) + len(word) > 30:
-                                    parts.append(current)
-                                    current = word
-                                else:
-                                    current = current + ', ' + word if current else word
-                            if current:
-                                parts.append(current)
-                            label = '<BR/>'.join(parts)
-
-                    color_cell = f'<TD BGCOLOR="{color}" WIDTH="25" HEIGHT="20" BORDER="1" CELLPADDING="5"> </TD>'
-                    label_cell = f'<TD ALIGN="LEFT" CELLPADDING="5"><FONT COLOR="{text_color}">{label}</FONT></TD>'
-                    rows.append(f'<TR>{color_cell}{label_cell}</TR>')
-
-                legend_html = f'''<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="3" CELLPADDING="10">
-                    {''.join(rows)}
-                </TABLE>>'''
-                c.node('legend_table', label=legend_html, shape='plaintext')
+        legend_html = build_legend(set_colors, text_color, border_color)
+        dot.attr(labelloc='b', labeljust='r', label=legend_html)
 
         # Render to the data directory with mode suffix
         output_path = data_dir / f'graph_{mode}'
