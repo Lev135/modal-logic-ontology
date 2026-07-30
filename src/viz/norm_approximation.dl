@@ -3,9 +3,9 @@
 
 .init norm_approximation = VizComp<Size>
 
-norm_approximation.show(l) :- CongLogs.extends(l, $L("K")).
+norm_approximation.show(l) :- CongLogs.extends(l, @logic("K")).
 
-norm_approximation.hide($L("Fm")).
+norm_approximation.hide(@logic("Fm")).
 
 norm_approximation.category_name($Finite(), "finite").
 norm_approximation.category_name($Exponential(), "exponential").

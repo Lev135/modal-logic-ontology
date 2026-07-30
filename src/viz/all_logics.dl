@@ -11,8 +11,8 @@ all_logics.category_name($Monotone(), "monotone").
 
 all_logics.implies($Normal(), $Monotone()).
 
-all_logics.logic_category(l, $Normal()) :- CongLogs.extends(l, $L("K")).
-all_logics.logic_category(l, $Monotone()) :- CongLogs.extends(l, $L("EM")).
+all_logics.logic_category(l, $Normal()) :- CongLogs.extends(l, @logic("K")).
+all_logics.logic_category(l, $Monotone()) :- CongLogs.extends(l, @logic("EM")).
 
 .output all_logics.out_node(filename="all_logics/node.csv", rfc4180=true)
 .output all_logics.out_category(filename="all_logics/category.csv", rfc4180=true)

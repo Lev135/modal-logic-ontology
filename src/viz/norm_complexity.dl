@@ -5,8 +5,8 @@
 
 .init norm_complexity = VizComp<NormComplexityCat>
 
-norm_complexity.show(l) :- CongLogs.extends(l, $L("K")).
-norm_complexity.hide($L("Fm")).
+norm_complexity.show(l) :- CongLogs.extends(l, @logic("K")).
+norm_complexity.hide(@logic("Fm")).
 
 norm_complexity.category_name($Dec_coNP(), "coNP decidable").
 norm_complexity.category_name($Dec_PSpace(), "PSpace decidable").

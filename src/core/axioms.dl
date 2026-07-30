@@ -3,49 +3,49 @@
 
 // Formula in string representation
 .type formula <: symbol
-// Axiom name wrapped in ADT
-.type Axiom = A { ax_name : symbol }
-.type AxList = [head : Axiom, tail : AxList]
+.type axiom <: symbol
+.functor axiom(s : symbol) : axiom
+.type AxList = [head : axiom, tail : AxList]
 .type axListName <: symbol
 
 .comp AxiomsComp {
-  .decl dec(ax : Axiom)
-  .output dec(filename="declared/$A.csv")
+  .decl dec(ax : axiom)
+  .output dec(filename="declared/axiom.csv")
 
   .decl dec_list(axs : AxList)
   dec_list(axs) :- dec_list([_, axs]).
   .decl named_list(axs : AxList, name : axListName)
   dec_list(axs) :- named_list(axs, _).
 
-  .decl ax_form(ax : Axiom, f : formula)
+  .decl ax_form(ax : axiom, f : formula)
   dec(ax) :- ax_form(ax, _).
   errors("Axiom declared twice: " + n)
-    :- ax_form(ax, f1), ax_form(ax, f2), f1 != f2, ax = $A(n).
+    :- ax_form(ax, f1), ax_form(ax, f2), f1 != f2, ax = n.
 
-  .decl subframe_hereditary(ax : Axiom)
-  .decl cofinal_subframe_hereditary(ax : Axiom)
+  .decl subframe_hereditary(ax : axiom)
+  .decl cofinal_subframe_hereditary(ax : axiom)
   cofinal_subframe_hereditary(ax) :- subframe_hereditary(ax).
 
-  .decl alt(ax : Axiom, n : unsigned)
-  .decl bd(ax : Axiom, n : unsigned)
-  .decl bw(ax : Axiom, n : unsigned)
+  .decl alt(ax : axiom, n : unsigned)
+  .decl bd(ax : axiom, n : unsigned)
+  .decl bw(ax : axiom, n : unsigned)
 }
 
 .init Axioms = AxiomsComp
 
 .decl _axioms(ax : symbol, is_subframe_hereditary : symbol, f : formula)
 .input _axioms(filename="core/axioms.csv", rfc4180=true, headers=true)
-Axioms.ax_form($A(ax), f) :- _axioms(ax, _, f).
-Axioms.subframe_hereditary($A(ax)) :- _axioms(ax, "yes", _).
-Axioms.cofinal_subframe_hereditary($A(ax)) :- _axioms(ax, "cofinal", _).
+Axioms.ax_form(@axiom(ax), f) :- _axioms(ax, _, f).
+Axioms.subframe_hereditary(@axiom(ax)) :- _axioms(ax, "yes", _).
+Axioms.cofinal_subframe_hereditary(@axiom(ax)) :- _axioms(ax, "cofinal", _).
 Axioms.subframe_hereditary(ax)
   :- Axioms.alt(ax, _), Axioms.bd(ax, _), Axioms.bw(ax, _).
 
-Axioms.alt($A("Alt₁"), 1).
-Axioms.alt($A("Alt₂"), 2).
+Axioms.alt(@axiom("Alt₁"), 1).
+Axioms.alt(@axiom("Alt₂"), 2).
 
-Axioms.bd($A("Bd₁"), 1).
-Axioms.bd($A("Bd₂"), 2).
+Axioms.bd(@axiom("Bd₁"), 1).
+Axioms.bd(@axiom("Bd₂"), 2).
 
-Axioms.bw($A("Bw₁"), 1).
-Axioms.bw($A("Bw₂"), 1).
+Axioms.bw(@axiom("Bw₁"), 1).
+Axioms.bw(@axiom("Bw₂"), 1).

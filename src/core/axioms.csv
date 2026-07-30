@@ -1,4 +1,4 @@
-$A,is subframe-hereditary,formula
+:axiom,is subframe-hereditary:,formula:
 M,none,<>p-><>(p\/q)
 C,none,<>(p\/q)-><>p\/<>q
 N,none,[]t

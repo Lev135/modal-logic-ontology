@@ -3,38 +3,38 @@
 #include "../core/cong_logics.dl"
 
 .comp VizComp<C> {
-  .decl logic_category(l : Logic, c : C)
+  .decl logic_category(l : logic, c : C)
   .decl category_name(c : C, c_name : symbol)
   .decl implies(c1 : C, c2 : C)
 
   // Specifies, which logics will be shown
-  .decl show(l : Logic)
+  .decl show(l : logic)
   // Specifies which logics should not be shown
-  .decl hide(l : Logic)
+  .decl hide(l : logic)
 
   // Output
-  .decl out_node(n : symbol)
-  out_node(n) :- _show(_, n).
+  .decl out_node(l : logic)
+  out_node(l) :- _show(l).
 
-  .decl out_category(n : symbol, c : symbol)
-  out_category(n, c_name) :- _show(l, n), category_name(c, c_name),
+  .decl out_category(l : logic, c : symbol)
+  out_category(l, c_name) :- _show(l), category_name(c, c_name),
     logic_category(l, c), !_implied_cat(l, c).
 
-  .decl out_edge(n1 : symbol, n2 : symbol)
-  out_edge(n2, n1)
+  .decl out_edge(l1 : logic, l2 : logic)
+  out_edge(l2, l1)
     :- CongLogs.extends(l1, l2), !_extends_trans(l1, l2), l1 != l2,
-      _show(l1, n1), _show(l2, n2).
+      _show(l1), _show(l2).
 
   // Internal
 
-  .decl _show(l : Logic, n : symbol)
-  _show(l, n) :- show(l), !hide(l), l = $L(n).
+  .decl _show(l : logic)
+  _show(l) :- show(l), !hide(l).
 
-  .decl _extends_trans(l1 : Logic, l3 : Logic)
+  .decl _extends_trans(l1 : logic, l3 : logic)
   _extends_trans(l1, l3) :-
-    CongLogs.r_between(l1, l2, l3), _show(l2, _),
+    CongLogs.r_between(l1, l2, l3), _show(l2),
     !CongLogs.extends(l2, l1), !CongLogs.extends(l3, l2).
 
-  .decl _implied_cat(l : Logic, c : C)
+  .decl _implied_cat(l : logic, c : C)
   _implied_cat(l, c) :- logic_category(l, c2), implies(c2, c).
 }

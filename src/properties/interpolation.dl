@@ -2,13 +2,13 @@
 #include "../core/cong_logics.dl"
 
 .comp InterpolationComp {
-  .decl CIP(l : Logic, b : Bool3)
-  .decl LIP(l : Logic, b : Bool3)
+  .decl CIP(l : logic, b : Bool3)
+  .decl LIP(l : logic, b : Bool3)
 
   CIP(l, $True()) :- LIP(l, $True()).
   LIP(l, $False()) :- CIP(l, $False()).
 }
 .init Interpolation = InterpolationComp
 
-Interpolation.CIP($L("K4.3"), $False()).
-Interpolation.LIP($L("K"), $True()).
+Interpolation.CIP(@logic("K4.3"), $False()).
+Interpolation.LIP(@logic("K"), $True()).

@@ -9,38 +9,38 @@
   less($Polynomial(), $Exponential()).
   less($Constant(), $Polynomial()).
 
-  .decl tabular(l : Logic)
+  .decl tabular(l : logic)
   tabular(l) :- approximable(l, $Constant()).
   approximable(l, $Constant()) :- tabular(l).
 
-  .decl fmp(l : Logic)
+  .decl fmp(l : logic)
   fmp(l) :- approximable(l, $Finite()).
   approximable(l, $Finite()) :- fmp(l).
 
-  .decl approximable(l : Logic, s : Size)
+  .decl approximable(l : logic, s : Size)
   approximable(l, s2) :- approximable(l, s1), less(s1, s2).
 }
 
 .init Approximation = ApproximationComp
 
 // ChZa Theorem 18.14
-Approximation.approximable(l, $Polynomial()) :- CongLogs.extends(l, $L("S4.3")).
+Approximation.approximable(l, $Polynomial()) :- CongLogs.extends(l, @logic("S4.3")).
 // ChZa Theorem 18.12
 Approximation.approximable(l, $Polynomial())
   :- CongLogs.r_extension(l, l0, bd), Axioms.bd(bd, _),
-    (l0 = $L("K4"); l0 = $L("S4"); l0 = $L("Grz"); l0 = $L("GL")).
+    (l0 = @logic("K4"); l0 = @logic("S4"); l0 = @logic("Grz"); l0 = @logic("GL")).
 // ChZa Theorem 18.13
 Approximation.approximable(l, $Polynomial())
   :- CongLogs.r_extension(l, l0, bw), Axioms.bw(bw, _),
-    (l0 = $L("K4"); l0 = $L("S4"); l0 = $L("Grz"); l0 = $L("GL")).
+    (l0 = @logic("K4"); l0 = @logic("S4"); l0 = @logic("Grz"); l0 = @logic("GL")).
 // Every extension of a tabular logic is tabular
 Approximation.tabular(l) :- Approximation.tabular(l0), CongLogs.extends(l, l0).
 // KTᵈ is the logic of {◯, ⬤}
-Approximation.tabular($L("KTᵈ")).
+Approximation.tabular(@logic("KTᵈ")).
 // Generalization of Fine's theorem http://doi.org/10.1215/00294527-1306190
 Approximation.fmp(l)
-  :- CongLogs.extends(l, $L("wK4")),
+  :- CongLogs.extends(l, @logic("wK4")),
     CongLogs.cofinal_subframe_hereditary(l).
 // TODO reference??
 Approximation.approximable(l, $Polynomial())
-  :- CongLogs.extends(l, l0), (l0 = $L("KAlt₁"); l0 = $L("KTAlt₂")).
+  :- CongLogs.extends(l, l0), (l0 = @logic("KAlt₁"); l0 = @logic("KTAlt₂")).
