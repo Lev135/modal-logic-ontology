@@ -1,4 +1,7 @@
 .vscode/
-out/
+out/*
+!out/*/
+out/*/*
+!out/*/*.png
 venv
 data/
