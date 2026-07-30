@@ -1,0 +1,211 @@
+// Graph
+digraph {
+	mclimit=15.0 newrank=true nodesep=0.5 rankdir=BT ranksep=0.8
+	edge [arrowhead=vee arrowsize=0.8 color="#FFFFFFC0"]
+	bgcolor="#1a1a1a"
+	"S4.3" [label="S4.3" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	K4 [label=K4 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	S4 [label=S4 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	Grz [label=Grz color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	GL [label=GL color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	wK4 [label=wK4 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KTᵈ" [label="KTᵈ" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	K [label=K color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"Grz.3" [label="Grz.3" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"GL.2" [label="GL.2" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"Grz.2" [label="Grz.2" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	KTB [label=KTB color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"GL.3" [label="GL.3" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	E [label=E color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	Fm [label=Fm color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	EM [label=EM color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	Ver [label=Ver color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	Triv [label=Triv color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	KT [label=KT color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	ED4 [label=ED4 color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	EMD5 [label=EMD5 color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	KD [label=KD color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	EN [label=EN color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	EP [label=EP color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	ED [label=ED color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	ET [label=ET color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	EC [label=EC color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	EB [label=EB color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	E4 [label=E4 color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	"E4*" [label="E4*" color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	ET5 [label=ET5 color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	ETB [label=ETB color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	ECP [label=ECP color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	ECD [label=ECD color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	ECT [label=ECT color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	EC4 [label=EC4 color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	"EC4*" [label="EC4*" color=lightgrey fillcolor="#11a579" fontcolor=white penwidth=1.5 style=filled]
+	EMP [label=EMP color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	EMD [label=EMD color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	EMT [label=EMT color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	EM4 [label=EM4 color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	"EM4*" [label="EM4*" color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	mGL [label=mGL color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	EMC [label=EMC color=lightgrey fillcolor="#3969ac" fontcolor=white penwidth=1.5 style=filled]
+	KB [label=KB color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	KT5 [label=KT5 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	KDB [label=KDB color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	KD5 [label=KD5 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	KB5 [label=KB5 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	K5 [label=K5 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	KB4 [label=KB4 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	K45 [label=K45 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	KD4 [label=KD4 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KAlt₁" [label="KAlt₁" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KAlt₂" [label="KAlt₂" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KDAlt₁" [label="KDAlt₁" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KDAlt₂" [label="KDAlt₂" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KTAlt₂" [label="KTAlt₂" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KAlt₂.2" [label="KAlt₂.2" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KDAlt₂.2" [label="KDAlt₂.2" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"K.1" [label="K.1" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"K.2" [label="K.2" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"K4.1" [label="K4.1" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"K4.2" [label="K4.2" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KD4.2" [label="KD4.2" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"S4.1" [label="S4.1" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"S4.2" [label="S4.2" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	S5 [label=S5 color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"K4.3" [label="K4.3" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"KD4.3" [label="KD4.3" color=lightgrey fillcolor="#7f3c8d" fontcolor=white penwidth=1.5 style=filled]
+	"S4.3" -> "Grz.3"
+	"S4.3" -> S5
+	K4 -> GL
+	K4 -> KD4
+	K4 -> "K4.2"
+	S4 -> "S4.1"
+	S4 -> "S4.2"
+	Grz -> "Grz.2"
+	GL -> "GL.2"
+	wK4 -> K4
+	"KTᵈ" -> Ver
+	"KTᵈ" -> Triv
+	K -> wK4
+	K -> KD
+	K -> KB
+	K -> K5
+	K -> "KAlt₂"
+	K -> "K.2"
+	"Grz.3" -> Triv
+	"GL.2" -> "GL.3"
+	"Grz.2" -> "Grz.3"
+	KTB -> KT5
+	"GL.3" -> Ver
+	E -> EM
+	E -> EN
+	E -> EP
+	E -> ED
+	E -> EC
+	E -> EB
+	E -> E4
+	E -> "E4*"
+	EM -> EMP
+	EM -> EM4
+	EM -> EMC
+	Ver -> Fm
+	Triv -> Fm
+	KT -> S4
+	KT -> KTB
+	KT -> "KTAlt₂"
+	ED4 -> KD4
+	EMD5 -> KD5
+	KD -> KT
+	KD -> KDB
+	KD -> KD5
+	KD -> KD4
+	KD -> "KDAlt₂"
+	KD -> "K.1"
+	EN -> K
+	EP -> ET
+	EP -> ECP
+	EP -> EMP
+	ED -> ED4
+	ED -> ET
+	ED -> ECD
+	ED -> EMD
+	ET -> ETB
+	ET -> ECT
+	ET -> EMT
+	EC -> ECD
+	EC -> "EC4*"
+	EC -> EMC
+	EB -> ETB
+	EB -> KB
+	E4 -> ED4
+	E4 -> EC4
+	E4 -> EM4
+	"E4*" -> "EC4*"
+	"E4*" -> "EM4*"
+	ET5 -> KT5
+	ETB -> KTB
+	ETB -> ET5
+	ECP -> KD
+	ECP -> ECT
+	ECD -> ECP
+	ECT -> KT
+	EC4 -> K4
+	"EC4*" -> EC4
+	EMP -> EMD
+	EMD -> EMD5
+	EMD -> KD
+	EMD -> EMT
+	EMT -> KT
+	EM4 -> "EM4*"
+	"EM4*" -> K4
+	"EM4*" -> mGL
+	mGL -> GL
+	EMC -> K
+	KB -> KDB
+	KB -> KB5
+	KT5 -> S5
+	KDB -> KTB
+	KD5 -> KT5
+	KB5 -> KT5
+	KB5 -> KB4
+	K5 -> KD5
+	K5 -> KB5
+	K5 -> K45
+	KB4 -> "KTᵈ"
+	KB4 -> S5
+	K45 -> KB4
+	KD4 -> S4
+	KD4 -> "K4.1"
+	KD4 -> "KD4.2"
+	"KAlt₁" -> "KTᵈ"
+	"KAlt₁" -> "KDAlt₁"
+	"KAlt₂" -> "KDAlt₂"
+	"KAlt₂" -> "KAlt₂.2"
+	"KDAlt₁" -> Triv
+	"KDAlt₂" -> "KDAlt₂.2"
+	"KTAlt₂" -> Triv
+	"KAlt₂.2" -> "KAlt₁"
+	"KAlt₂.2" -> "KDAlt₂.2"
+	"KDAlt₂.2" -> "KDAlt₁"
+	"KDAlt₂.2" -> "KTAlt₂"
+	"K.1" -> "KDAlt₁"
+	"K.1" -> "K4.1"
+	"K.2" -> "KAlt₂.2"
+	"K.2" -> "K4.2"
+	"K4.1" -> "S4.1"
+	"K4.2" -> "GL.2"
+	"K4.2" -> "KD4.2"
+	"K4.2" -> "K4.3"
+	"KD4.2" -> "S4.2"
+	"KD4.2" -> "KD4.3"
+	"S4.1" -> Grz
+	"S4.2" -> "S4.3"
+	"S4.2" -> "Grz.2"
+	S5 -> Triv
+	"K4.3" -> "GL.3"
+	"K4.3" -> K45
+	"K4.3" -> "KD4.3"
+	"KD4.3" -> "S4.3"
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="13" COLOR="lightgrey">
+        <TR><TD BGCOLOR="#3969ac" WIDTH="25" HEIGHT="20" BORDER="1" CELLPADDING="5"> </TD><TD ALIGN="LEFT" CELLPADDING="5"><FONT COLOR="white">monotone</FONT></TD></TR><TR><TD BGCOLOR="#7f3c8d" WIDTH="25" HEIGHT="20" BORDER="1" CELLPADDING="5"> </TD><TD ALIGN="LEFT" CELLPADDING="5"><FONT COLOR="white">normal</FONT></TD></TR><TR><TD BGCOLOR="#11a579" WIDTH="25" HEIGHT="20" BORDER="1" CELLPADDING="5"> </TD><TD ALIGN="LEFT" CELLPADDING="5"><FONT COLOR="white">no category</FONT></TD></TR>
+    </TABLE>> labeljust=r labelloc=b
+}
