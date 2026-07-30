@@ -1,20 +1,28 @@
 #include "./utils.dl"
 #include "../properties/complexity.dl"
 
-.init norm_complexity = VizComp
+.type NormComplexityCat = Dec_coNP{} | Dec_PSpace{} | Hard_PSpace{vars : InfUnsigned}
+
+.init norm_complexity = VizComp<NormComplexityCat>
 
 norm_complexity.show(l) :- CongLogs.extends(l, $L("K")).
 norm_complexity.hide($L("Fm")).
 
-norm_complexity.logic_category(l, "coNP decidable")
-  :- Complexity.in($SAT(l, $Inf()), $coNP()).
-norm_complexity.logic_category(l, "PSpace decidable")
-  :- Complexity.in($SAT(l, $Inf()), $PSpace()), !Complexity.in($SAT(l, $Inf()), $coNP()).
-norm_complexity.logic_category(l, "PSpace hard in " + to_string(n) + " variables")
-  :- Complexity.hard($SAT(l, $Fin(n)), $PSpace()), !hard_less(l, $Fin(n), $PSpace()).
+norm_complexity.category_name($Dec_coNP(), "coNP decidable").
+norm_complexity.category_name($Dec_PSpace(), "PSpace decidable").
+norm_complexity.category_name($Hard_PSpace($Fin(n)), "PSpace hard in " + to_string(n) + " variables")
+  :- is_num(n).
+norm_complexity.category_name($Hard_PSpace($Inf()), "PSpace hard").
 
-.decl hard_less(l : Logic, n : InfUnsigned, c : CompC)
-hard_less(l, n, c) :- Complexity.hard($SAT(l, m), c), inf_less(m, n).
+norm_complexity.implies($Hard_PSpace(n1), $Hard_PSpace(n2)) :- inf_less(n1, n2).
+norm_complexity.implies($Dec_coNP(), $Dec_PSpace()).
+
+norm_complexity.logic_category(l, $Dec_coNP())
+  :- Complexity.in($SAT(l, $Inf()), $coNP()).
+norm_complexity.logic_category(l, $Dec_PSpace())
+  :- Complexity.in($SAT(l, $Inf()), $PSpace()).
+norm_complexity.logic_category(l, $Hard_PSpace(n))
+  :- Complexity.hard($SAT(l, n), $PSpace()).
 
 
 .output norm_complexity.out_node(filename="norm_complexity/node.csv", rfc4180=true)

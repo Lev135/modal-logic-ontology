@@ -1,27 +1,21 @@
 #include "./utils.dl"
 #include "../properties/approximation.dl"
 
-.init norm_approximation = VizComp
+.init norm_approximation = VizComp<Size>
 
 norm_approximation.show(l) :- CongLogs.extends(l, $L("K")).
 
 norm_approximation.hide($L("Fm")).
 
+norm_approximation.category_name($Finite(), "finite").
+norm_approximation.category_name($Exponential(), "exponential").
+norm_approximation.category_name($Polynomial(), "polynomial").
+norm_approximation.category_name($Linear(), "linear").
+norm_approximation.category_name($Constant(), "constant").
 
-.decl size_name(s : Size, ss : symbol)
-size_name($Finite(), "finite").
-size_name($Exponential(), "exponential").
-size_name($Polynomial(), "polynomial").
-size_name($Linear(), "linear").
-size_name($Constant(), "constant").
+norm_approximation.logic_category(l, s) :- Approximation.approximable(l, s).
 
-norm_approximation.logic_category(l, ss)
-  :- size_name(s, ss),
-    Approximation.approximable(l, s), !less_approximable(l, s, _).
-
-.decl less_approximable(l : Logic, s0 : Size, s : Size)
-less_approximable(l, s0, s)
-  :- Approximation.approximable(l, s), Approximation.less(s, s0).
+norm_approximation.implies(s1, s2) :- Approximation.less(s1, s2).
 
 
 
