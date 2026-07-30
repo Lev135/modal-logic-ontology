@@ -19,15 +19,12 @@
 
   .decl approximable(l : Logic, s : Size)
   approximable(l, s2) :- approximable(l, s1), less(s1, s2).
-
-  .decl hereditary_approximable(l : Logic, s : Size)
-  approximable(l1, s) :- hereditary_approximable(l2, s), CongLogs.extends(l1, l2).
 }
 
 .init Approximation = ApproximationComp
 
 // ChZa Theorem 18.14
-Approximation.hereditary_approximable($L("S4.3"), $Polynomial()).
+Approximation.approximable(l, $Polynomial()) :- CongLogs.extends(l, $L("S4.3")).
 // ChZa Theorem 18.12
 Approximation.approximable(l, $Polynomial())
   :- CongLogs.r_extension(l, l0, bd), Axioms.bd(bd, _),
