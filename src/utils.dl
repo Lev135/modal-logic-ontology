@@ -18,15 +18,22 @@ inf_less($Fin(n1), $Fin(n2)) :- n1 < n2, is_num(n1), is_num(n2).
 // Unknown {} is used for properties which are stated somewhere as open problems
 .type Bool3 = True {} | False {} | Unknown {}
 
-.comp ListsComp<T> {
+.comp Declarator<Ty, Name> {
+  .decl kind_name(s : symbol)
+
+  .decl dec(x : Ty)
+  .decl named(x : Ty, n : Name)
+
+  dec(x) :- named(x, _).
+
+  errors(kn + " with name '" + n + "' was declared twice")
+    :- kind_name(kn), named(x1, n), named(x2, n), x1 != x2.
+}
+
+.comp ListsComp<T> : Declarator<Ty, name> {
+  kind_name("List").
   .type Ty = [head : T, tail : Ty]
   .type name <: symbol
 
-  .decl dec(xs : Ty)
   dec(xs) :- dec([_, xs]).
-
-  .decl named(xs : Ty, name : name)
-  dec(xs) :- named(xs, _).
-  errors("List with name '" + name + "' was declared twice")
-    :- named(xs1, name), named(xs2, name), xs1 != xs2.
 }
