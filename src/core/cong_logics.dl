@@ -30,15 +30,15 @@
     r_extension(l1, l0, ax1),
     r_extension(l2, l0, ax2).
 
-  .decl _r_extension_by_some_of(l : logic, l0 : logic, axs : AxList)
-  _r_extension_by_some_of(l, l, axs) :- dec(l), Axioms.dec_list(axs).
-  _r_extension_by_some_of(l, l0, axs) :- Axioms.dec_list(axs), axs = [ax, axs1],
+  .decl _r_extension_by_some_of(l : logic, l0 : logic, axs : AxLists.Ty)
+  _r_extension_by_some_of(l, l, axs) :- dec(l), AxLists.dec(axs).
+  _r_extension_by_some_of(l, l0, axs) :- AxLists.dec(axs), axs = [ax, axs1],
     r_extension(l, l1, ax), _r_extension_by_some_of(l1, l0, axs1).
-  _r_extension_by_some_of(l, l0, axs) :- Axioms.dec_list(axs), axs = [_, axs1],
+  _r_extension_by_some_of(l, l0, axs) :- AxLists.dec(axs), axs = [_, axs1],
     _r_extension_by_some_of(l, l0, axs1).
-  .decl r_extension_by_some_of(l : logic, l0 : logic, axs : axListName)
+  .decl r_extension_by_some_of(l : logic, l0 : logic, axs : AxLists.name)
   r_extension_by_some_of(l, l0, name)
-    :- _r_extension_by_some_of(l, l0, axs), Axioms.named_list(axs, name).
+    :- _r_extension_by_some_of(l, l0, axs), AxLists.named(axs, name).
 
   .decl r_fin_axiomaizable(l : logic)
   r_fin_axiomaizable(l) :- ext(l, l0, _), r_fin_axiomaizable(l0).

@@ -85,10 +85,10 @@ Complexity.in($SAT(l, $Inf()), $coNP()) :- Approximation.approximable(l, $Polyno
 // This result follows from my unpublished material. Of course, for some logics,
 // like K, K4, S4, etc. we could provide references, but I don't know about others
 // TODO: add appropriate citations
-Axioms.named_list([@axiom("T"), [@axiom("D"), [@axiom("B"), nil]]], "TDB").
+AxLists.named([@axiom("T"), [@axiom("D"), [@axiom("B"), nil]]], "TDB").
 Complexity.in($SAT(l, $Inf()), $PSpace())
   :- CongLogs.r_extension_by_some_of(l, @logic("K"), "TDB").
-Axioms.named_list([@axiom("T"), [@axiom("D"), [@axiom(".1"), [@axiom(".2"), nil]]]], "TD.1.2").
+AxLists.named([@axiom("T"), [@axiom("D"), [@axiom(".1"), [@axiom(".2"), nil]]]], "TD.1.2").
 Complexity.in($SAT(l, $Inf()), $PSpace())
   :- CongLogs.r_extension_by_some_of(l, @logic("K4"), "TD.1.2").
 Complexity.in($SAT(@logic("wK4"), $Inf()), $PSpace()).

@@ -17,3 +17,14 @@ inf_less($Fin(n1), $Fin(n2)) :- n1 < n2, is_num(n1), is_num(n2).
 
 // Unknown {} is used for properties which are stated somewhere as open problems
 .type Bool3 = True {} | False {} | Unknown {}
+
+.comp ListsComp<T> {
+  .type Ty = [head : T, tail : Ty]
+  .type name <: symbol
+
+  .decl dec(xs : Ty)
+  dec(xs) :- dec([_, xs]).
+
+  .decl named(xs : Ty, name : name)
+  dec(xs) :- named(xs, _).
+}

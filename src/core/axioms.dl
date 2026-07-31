@@ -5,17 +5,12 @@
 .type formula <: symbol
 .type axiom <: symbol
 .functor axiom(s : symbol) : axiom
-.type AxList = [head : axiom, tail : AxList]
-.type axListName <: symbol
+
+.init AxLists = ListsComp<axiom>
 
 .comp AxiomsComp {
   .decl dec(ax : axiom)
   .output dec(filename="declared/axiom.csv")
-
-  .decl dec_list(axs : AxList)
-  dec_list(axs) :- dec_list([_, axs]).
-  .decl named_list(axs : AxList, name : axListName)
-  dec_list(axs) :- named_list(axs, _).
 
   .decl ax_form(ax : axiom, f : formula)
   dec(ax) :- ax_form(ax, _).
