@@ -85,14 +85,20 @@ Complexity.in($SAT(l, $Inf()), $coNP()) :- Approximation.approximable(l, $Polyno
 // This result follows from my unpublished material. Of course, for some logics,
 // like K, K4, S4, etc. we could provide references, but I don't know about others
 // TODO: add appropriate citations
-CongLogs.ALists.name_def("TDB", [@axiom("T"), [@axiom("D"), [@axiom("B"), nil]]]).
-CongLogs.find_extensions_by_some_of(@logic("K"), "TDB").
+CongLogs.find_extensions_by_some_of(
+  @logic("K"),
+  [@axiom("T"), [@axiom("D"), [@axiom("B"), nil]]],
+  "K+TDB"
+).
 Complexity.in($SAT(l, $Inf()), $PSpace())
-  :- CongLogs.r_extension_by_some_of(l, @logic("K"), "TDB").
-CongLogs.ALists.name_def("TD.1.2", [@axiom("T"), [@axiom("D"), [@axiom(".1"), [@axiom(".2"), nil]]]]).
-CongLogs.find_extensions_by_some_of(@logic("K4"), "TD.1.2").
+  :- CongLogs.r_extension_by_some_of(l, "K+TDB").
+CongLogs.find_extensions_by_some_of(
+  @logic("K4"),
+  [@axiom("T"), [@axiom("D"), [@axiom(".1"), [@axiom(".2"), nil]]]],
+  "K4+TD.1.2"
+).
 Complexity.in($SAT(l, $Inf()), $PSpace())
-  :- CongLogs.r_extension_by_some_of(l, @logic("K4"), "TD.1.2").
+  :- CongLogs.r_extension_by_some_of(l, "K4+TD.1.2").
 Complexity.in($SAT(@logic("wK4"), $Inf()), $PSpace()).
 Complexity.in($SAT(l, $Inf()), $PSpace())
   :- l = @logic("GL"); l = @logic("Grz"); l = @logic("GL.2"); l = @logic("Grz.2").

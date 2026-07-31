@@ -62,25 +62,21 @@
   r_ax_implies_over(l0, a1, a3) :- r_ax_implies_over(l0, a1, a2), r_ax_implies_over(l0, a2, a3).
   r_ax_implies_over(l1, a1, a2) :- r_ax_implies_over(l0, a1, a2), extends(l1, l0).
 
-  // `find_extensions_by_some_of(l0, n)` starts search of extensions of
-  // `l0` by axioms from the list with name `n`.
+  .type extensions_by_some_of_id <: symbol
+  // `find_extensions_by_some_of(l0, axs, id)` starts search of extensions of
+  // `l0` by axioms from `axs` and attaches `id` to this operation.
   //
-  // To define named list, use `ALists.name_def(n, axs)`
-  //
-  // To gather results, use `r_extension_by_some_of(l, l0, n)`.
-  .decl find_extensions_by_some_of(l0 : L, n : ALists.name)
-  _find_extensions_by_some_of(l0, axs) :-
-    find_extensions_by_some_of(l0, n), ALists.name_def(n, axs).
-  // `r_extension_by_some_of(l, l0, n) <= (l = l0 + Γ)`, where `Γ` is a set of
-  // some formulas from the list with name `n`.
-  //
-  // NB! You should also run `find_extensions_by_some_of(l0, n)` to obtain
-  // a meaningful result.
-  .decl r_extension_by_some_of(l : L, l0 : L, n : ALists.name)
-  r_extension_by_some_of(l, l0, n) :-
+  // To gather results, use `r_extension_by_some_of(l, id)`.
+  .decl find_extensions_by_some_of(l0 : L, axs : ALists.Ty, id : extensions_by_some_of_id)
+  _find_extensions_by_some_of(l0, axs), ALists.def(axs) :-
+    find_extensions_by_some_of(l0, axs, _).
+  // `r_extension_by_some_of(l, id) <= (l = l0 + Γ)`, where `Γ` is a set of
+  // some formulas from `xs`, `l0` and `xs` being that from
+  // `find_extensions_by_some_of(l0, axs, id)`.
+  .decl r_extension_by_some_of(l : L, id : extensions_by_some_of_id)
+  r_extension_by_some_of(l, id) :-
     _r_extension_by_some_of(l, l0, axs),
-    find_extensions_by_some_of(l0, n),
-    ALists.name_def(n, axs).
+    find_extensions_by_some_of(l0, axs, id).
 
   .decl _find_extensions_by_some_of(l0 : L, axs : ALists.Ty)
 
