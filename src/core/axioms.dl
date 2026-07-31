@@ -7,6 +7,7 @@
 .functor axiom(s : symbol) : axiom
 
 .init AxLists = ListsComp<axiom>
+AxLists.kind_name("Axioms list").
 
 .comp AxiomsComp {
   .decl dec(ax : axiom)

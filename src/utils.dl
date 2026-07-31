@@ -27,11 +27,13 @@ inf_less($Fin(n1), $Fin(n2)) :- n1 < n2, is_num(n1), is_num(n2).
   dec(x) :- named(x, _).
 
   errors(kn + " with name '" + n + "' was declared twice")
-    :- kind_name(kn), named(x1, n), named(x2, n), x1 != x2.
+    :- (kind_name(kn) ; !kind_name(_), kn = "Unknown"),
+      named(x1, n), named(x2, n), x1 != x2.
+
+  warnings("Declarator has no kind_name") :- !kind_name(_).
 }
 
 .comp ListsComp<T> : Declarator<Ty, name> {
-  kind_name("List").
   .type Ty = [head : T, tail : Ty]
   .type name <: symbol
 
