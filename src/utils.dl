@@ -18,24 +18,38 @@ inf_less($Fin(n1), $Fin(n2)) :- n1 < n2, is_num(n1), is_num(n2).
 // Unknown {} is used for properties which are stated somewhere as open problems
 .type Bool3 = True {} | False {} | Unknown {}
 
-.comp Declarator<Ty, Name> {
+// Abstract component for manager that tracks declarations
+.comp Declarator<Name, Def> {
+  // `kind_name(s)` = s is a human-readable name for the kind of objects.
+  // Used in error message.
+  //
+  // Must be set exactly once after '.init'
   .decl kind_name(s : symbol)
 
-  .decl dec(x : Ty)
-  .decl named(x : Ty, n : Name)
+  // `name_def(n, d)` = n is a name of object which is described by def
+  .decl name_def(n : Name, d : Def)
+  // `r_name(n)` = n is a name of some object
+  //
+  // READONLY. For writing use `name_def(n, d)`, specifying an object `d`
+  // describing the definition of `n`.
+  .decl r_name(n : Name)
+  // `def(d)` = d is a definition of some object.
+  // Useful for recursive data types to bound a variable.
+  .decl def(d : Def)
 
-  dec(x) :- named(x, _).
+  r_name(n) :- name_def(n, _).
+  def(x) :- name_def(_, x).
 
   errors(kn + " with name '" + n + "' was declared twice")
     :- (kind_name(kn) ; !kind_name(_), kn = "Unknown"),
-      named(x1, n), named(x2, n), x1 != x2.
+      name_def(n, x1), name_def(n, x2), x1 != x2.
 
   warnings("Declarator has no kind_name") :- !kind_name(_).
 }
 
-.comp ListsComp<T> : Declarator<Ty, name> {
+.comp ListsComp<T> : Declarator<name, Ty> {
   .type Ty = [head : T, tail : Ty]
   .type name <: symbol
 
-  dec(xs) :- dec([_, xs]).
+  def(xs) :- def([_, xs]).
 }
