@@ -27,4 +27,6 @@ inf_less($Fin(n1), $Fin(n2)) :- n1 < n2, is_num(n1), is_num(n2).
 
   .decl named(xs : Ty, name : name)
   dec(xs) :- named(xs, _).
+  errors("List with name '" + name + "' was declared twice")
+    :- named(xs1, name), named(xs2, name), xs1 != xs2.
 }
