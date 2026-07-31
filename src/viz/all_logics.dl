@@ -4,7 +4,7 @@
 
 .init all_logics = VizComp<AllLogicsCat>
 
-all_logics.show(l) :- CongLogs.dec(l).
+all_logics.show(l) :- CongLogs.r_name(l).
 
 all_logics.category_name($Normal(), "normal").
 all_logics.category_name($Monotone(), "monotone").

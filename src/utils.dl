@@ -40,9 +40,13 @@ inf_less($Fin(n1), $Fin(n2)) :- n1 < n2, is_num(n1), is_num(n2).
   r_name(n) :- name_def(n, _).
   def(x) :- name_def(_, x).
 
+  // `r_def_kind_name(s) <=> kind_name(s)` or no `kind_name` was defined and
+  // `s = Unknown`. Should be used for error messages.
+  .decl r_def_kind_name(s : symbol)
+  r_def_kind_name(s) :- kind_name(s); !kind_name(_), s = "Unknown".
+
   errors(kn + " with name '" + n + "' was declared twice")
-    :- (kind_name(kn) ; !kind_name(_), kn = "Unknown"),
-      name_def(n, x1), name_def(n, x2), x1 != x2.
+    :- r_def_kind_name(kn), name_def(n, x1), name_def(n, x2), x1 != x2.
 
   warnings("Declarator has no kind_name") :- !kind_name(_).
 }
@@ -52,4 +56,9 @@ inf_less($Fin(n1), $Fin(n2)) :- n1 < n2, is_num(n1), is_num(n2).
   .type name <: symbol
 
   def(xs) :- def([_, xs]).
+
+  .decl member(x : T, xs : Ty)
+  member(x, [x1, xs1]) :- def([x1, xs1]), (x = x1; member(x, xs1)).
 }
+
+.type Void = _Void {}

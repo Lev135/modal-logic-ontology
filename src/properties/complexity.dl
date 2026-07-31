@@ -37,13 +37,13 @@
 
 .init Complexity = ComplexityComp<Task>
 
-Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- CongLogs.dec(l), inf_less(n1, n2).
+Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- CongLogs.r_name(l), inf_less(n1, n2).
 
 // Every logic with infinitely many variables is coNP-hard
-Complexity.hard($SAT(l, $Inf()), $coNP()) :- CongLogs.dec(l).
+Complexity.hard($SAT(l, $Inf()), $coNP()) :- CongLogs.r_name(l).
 
 // Harrop's theorem
-Complexity.decidable($SAT(l, $Inf())) :- Approximation.fmp(l), CongLogs.r_fin_axiomaizable(l).
+Complexity.decidable($SAT(l, $Inf())) :- Approximation.fmp(l), CongLogs.fin_axiomatizable(l).
 
 // Lower bounds
 
@@ -85,10 +85,12 @@ Complexity.in($SAT(l, $Inf()), $coNP()) :- Approximation.approximable(l, $Polyno
 // This result follows from my unpublished material. Of course, for some logics,
 // like K, K4, S4, etc. we could provide references, but I don't know about others
 // TODO: add appropriate citations
-AxLists.name_def("TDB", [@axiom("T"), [@axiom("D"), [@axiom("B"), nil]]]).
+CongLogs.ALists.name_def("TDB", [@axiom("T"), [@axiom("D"), [@axiom("B"), nil]]]).
+CongLogs.find_extensions_by_some_of(@logic("K"), "TDB").
 Complexity.in($SAT(l, $Inf()), $PSpace())
   :- CongLogs.r_extension_by_some_of(l, @logic("K"), "TDB").
-AxLists.name_def("TD.1.2", [@axiom("T"), [@axiom("D"), [@axiom(".1"), [@axiom(".2"), nil]]]]).
+CongLogs.ALists.name_def("TD.1.2", [@axiom("T"), [@axiom("D"), [@axiom(".1"), [@axiom(".2"), nil]]]]).
+CongLogs.find_extensions_by_some_of(@logic("K4"), "TD.1.2").
 Complexity.in($SAT(l, $Inf()), $PSpace())
   :- CongLogs.r_extension_by_some_of(l, @logic("K4"), "TD.1.2").
 Complexity.in($SAT(@logic("wK4"), $Inf()), $PSpace()).

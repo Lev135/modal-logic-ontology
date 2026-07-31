@@ -1,53 +1,13 @@
 #pragma once
 
 #include "./axioms.dl"
+#include "./abstract_logic.dl"
 
 .type logic <: symbol
 .functor logic(s : symbol) : logic
 
-.comp CongLogsComp {
-  .decl dec(l : logic)
-  .output dec(filename="declared/logic.csv")
-
-  .decl ext(l : logic, l0 : logic, ax : axiom)
-  dec(l) :- ext(l, _, _).
-  errors("Logic declared twice: " + l)
-    :- ext(l, l01, ax1), ext(l, l02, ax2), (l01 != l02 ; ax1 != ax2).
-
-  .decl ax_implies_over(l : logic, ax1 : axiom, ax2 : axiom)
-  ax_implies_over(l, ax1, ax3) :- ax_implies_over(l, ax1, ax2), ax_implies_over(l, ax2, ax3).
-  ax_implies_over(l, ax1, ax2) :- ax_implies_over(l0, ax1, ax2), extends(l, l0).
-
-  .decl r_ax_equiv_over(l : logic, ax1 : axiom, ax2 : axiom)
-  r_ax_equiv_over(l, ax1, ax2) :- ax_implies_over(l, ax1, ax2), ax_implies_over(l, ax2, ax1).
-  r_ax_equiv_over(l, ax, ax) :- dec(l), Axioms.dec(ax).
-
-  .decl r_extension(l : logic, l0 : logic, ax : axiom)
-  r_extension(l, l0, ax1) :- ext(l, l0, ax2), r_ax_equiv_over(l0, ax1, ax2).
-  // (l0 + ax1) + ax2 = (l0 + ax2) + ax1
-  r_extension(l, l2, ax1) :-
-    r_extension(l, l1, ax2),
-    r_extension(l1, l0, ax1),
-    r_extension(l2, l0, ax2).
-
-  .decl _r_extension_by_some_of(l : logic, l0 : logic, axs : AxLists.Ty)
-  _r_extension_by_some_of(l, l, axs) :- dec(l), AxLists.def(axs).
-  _r_extension_by_some_of(l, l0, axs) :- AxLists.def(axs), axs = [ax, axs1],
-    r_extension(l, l1, ax), _r_extension_by_some_of(l1, l0, axs1).
-  _r_extension_by_some_of(l, l0, axs) :- AxLists.def(axs), axs = [_, axs1],
-    _r_extension_by_some_of(l, l0, axs1).
-  .decl r_extension_by_some_of(l : logic, l0 : logic, axs : AxLists.name)
-  r_extension_by_some_of(l, l0, name)
-    :- _r_extension_by_some_of(l, l0, axs), AxLists.name_def(name, axs).
-
-  .decl r_fin_axiomaizable(l : logic)
-  r_fin_axiomaizable(l) :- ext(l, l0, _), r_fin_axiomaizable(l0).
-
-  .decl r_equiv(l1 : logic, l2 : logic)
-  r_equiv(l1, l2) :- extends(l1, l2), extends(l2, l1).
-
-  .decl r_between(l_upper : logic, l : logic, l_lower : logic)
-  r_between(l_upper, l, l_lower) :- extends(l_upper, l), extends(l, l_lower).
+.comp CongLogsComp : LogicComp<logic, axiom, Void>{
+  .output r_name(filename="declared/logic.csv")
 
   .decl subframe_hereditary(l : logic)
   subframe_hereditary(l) :- r_extension(l, l0, ax),
@@ -57,25 +17,15 @@
   cofinal_subframe_hereditary(l) :- r_extension(l, l0, ax),
     cofinal_subframe_hereditary(l0), Axioms.cofinal_subframe_hereditary(ax).
   cofinal_subframe_hereditary(l) :- subframe_hereditary(l).
-
-  .decl extends(l1 : logic, l2 : logic)
-  .decl proves(l : logic, ax : axiom)
-
-  extends(l, l) :- dec(l).
-  extends(l1, l3) :- extends(l1, l2), extends(l2, l3).
-
-  proves(l, ax) :- extends(l, l0), proves(l0, ax).
-  proves(l, ax) :- ax_implies_over(l0, ax0, ax), extends(l, l0), proves(l, ax0).
-
-  extends(l, l0), proves(l, ax) :- ext(l, l0, ax).
-  extends(l1, l) :- ext(l, l0, ax), extends(l1, l0), proves(l1, ax).
 }
 
 .init CongLogs = CongLogsComp
+CongLogs.kind_name("Congruential logic").
+CongLogs.ax_name(ax) :- Axioms.dec(ax).
 
 .decl _ext(l : symbol, l0 : symbol, ax : symbol)
 .input _ext(filename="core/cong_ext.csv", rfc4180=true, headers=true)
-CongLogs.ext(@logic(l), @logic(l0), @axiom(ax)) :- _ext(l, l0, ax).
+CongLogs.w_extension(@logic(l), @logic(l0), @axiom(ax)) :- _ext(l, l0, ax).
 
 .decl _proves(l : symbol, ax : symbol)
 .input _proves(filename="core/proves.csv", rfc4180=true, headers=true)
@@ -83,29 +33,28 @@ CongLogs.proves(@logic(l), @axiom(ax)) :- _proves(l, ax).
 
 .decl _ax_implies_over(l : symbol, ax1 : symbol, ax2 : symbol)
 .input _ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true, headers=true)
-CongLogs.ax_implies_over(@logic(l), @axiom(ax1), @axiom(ax2)) :- _ax_implies_over(l, ax1, ax2).
+CongLogs.w_ax_implies_over(@logic(l), @axiom(ax1), @axiom(ax2)) :- _ax_implies_over(l, ax1, ax2).
 
 // Extra declarations
 
-CongLogs.dec(@logic("E")).
-CongLogs.r_fin_axiomaizable(@logic("E")).
+CongLogs.name_def(@logic("E"), $CongLogs.Least()).
+CongLogs.fin_axiomatizable(@logic("E")).
 
 CongLogs.proves(@logic("Fm"), ax) :- Axioms.dec(ax).
 
-CongLogs.ax_implies_over(@logic("E"), ax1, ax2)
+CongLogs.w_ax_implies_over(@logic("E"), ax1, ax2)
   :- Axioms.alt(ax1, n1), Axioms.alt(ax2, n2), n1 < n2.
 
 // Extra checks
 
 warnings("Two logics are equal: " + l1 + ", " + l2)
-  :- CongLogs.dec(l1), CongLogs.dec(l2),
-    l1 != l2, CongLogs.r_equiv(l1, l2).
+  :- l1 != l2, CongLogs.r_equiv(l1, l2).
 
 // Makinson's theorem: for every logic Λ ⊇ K one of the following holds:
 //   - Λ ⊆ Triv
 //   - Λ ⊆ Ver
 //   - Λ |- ⊥
 warnings("Unable to check Makinson's theorem for the logic " + l)
-  :- CongLogs.dec(l), CongLogs.extends(l, @logic("K")),
+  :- CongLogs.extends(l, @logic("K")),
       !CongLogs.extends(@logic("Triv"), l), !CongLogs.extends(@logic("Ver"), l),
       !CongLogs.proves(l, @axiom("Contr")).
