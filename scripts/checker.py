@@ -62,6 +62,9 @@ def check_dls(registry, stats):
     stats['dl_files'] += 1
     with dl_path.open() as file:
       for row_idx, line in enumerate(file, start=1):
+        line = line.strip()
+        if line.startswith('//'):
+          continue
         for match in pattern.finditer(line):
           identifier = match.group(1)
           string_literal = match.group(2)
