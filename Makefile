@@ -29,6 +29,7 @@ out/libfunctors.so: functors/functors.cpp
 
 help:
 	@echo "Available commands:"
-	@echo "  make clean - Remove /out directory and all its content"
-	@echo "  make souffle - Run souffle on file src/FILE (src/viz/main.dl by default) "
+	@echo "  make clean   - Remove /out directory and all its content"
+	@echo "  make souffle - Run souffle on file src/FILE (src/viz/main.dl by default,"
+	@echo "                 use '-- FILE=<filename>' for other file) "
 	@echo "  make viz     - Run souffle on src/viz.dl and then generate visualization"
