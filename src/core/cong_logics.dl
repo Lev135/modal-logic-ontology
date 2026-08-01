@@ -21,7 +21,7 @@
 
 .init CongLogs = CongLogsComp
 CongLogs.kind_name("Congruential logic").
-CongLogs.ax_name(ax) :- Axioms.dec(ax).
+CongLogs.ax_name(ax) :- Axioms.r_name(ax).
 
 .decl _ext(l : symbol, l0 : symbol, ax : symbol)
 .input _ext(filename="core/cong_ext.csv", rfc4180=true, headers=true)
@@ -40,7 +40,7 @@ CongLogs.w_ax_implies_over(@logic(l), @axiom(ax1), @axiom(ax2)) :- _ax_implies_o
 CongLogs.name_def(@logic("E"), $CongLogs.Least()).
 CongLogs.fin_axiomatizable(@logic("E")).
 
-CongLogs.proves(@logic("Fm"), ax) :- Axioms.dec(ax).
+CongLogs.proves(@logic("Fm"), ax) :- Axioms.r_name(ax).
 
 CongLogs.w_ax_implies_over(@logic("E"), ax1, ax2)
   :- Axioms.alt(ax1, n1), Axioms.alt(ax2, n2), n1 < n2.

@@ -9,14 +9,9 @@
 .init AxLists = ListsComp<axiom>
 AxLists.kind_name("Axioms list").
 
-.comp AxiomsComp {
-  .decl dec(ax : axiom)
-  .output dec(filename="declared/axiom.csv")
-
-  .decl ax_form(ax : axiom, f : formula)
-  dec(ax) :- ax_form(ax, _).
-  errors("Axiom declared twice: " + n)
-    :- ax_form(ax, f1), ax_form(ax, f2), f1 != f2, ax = n.
+.comp AxiomsComp : Declarator<axiom, formula> {
+  kind_name("Axiom").
+  .output r_name(filename="declared/axiom.csv")
 
   .decl subframe_hereditary(ax : axiom)
   .decl cofinal_subframe_hereditary(ax : axiom)
@@ -31,7 +26,7 @@ AxLists.kind_name("Axioms list").
 
 .decl _axioms(ax : symbol, is_subframe_hereditary : symbol, f : formula)
 .input _axioms(filename="core/axioms.csv", rfc4180=true, headers=true)
-Axioms.ax_form(@axiom(ax), f) :- _axioms(ax, _, f).
+Axioms.name_def(@axiom(ax), f) :- _axioms(ax, _, f).
 Axioms.subframe_hereditary(@axiom(ax)) :- _axioms(ax, "yes", _).
 Axioms.cofinal_subframe_hereditary(@axiom(ax)) :- _axioms(ax, "cofinal", _).
 Axioms.subframe_hereditary(ax)
