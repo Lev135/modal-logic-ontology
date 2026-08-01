@@ -23,17 +23,9 @@
 CongLogs.kind_name("Congruential logic").
 CongLogs.ax_name(ax) :- Axioms.r_name(ax).
 
-.decl _ext(l : symbol, l0 : symbol, ax : symbol)
-.input _ext(filename="core/cong_ext.csv", rfc4180=true, headers=true)
-CongLogs.w_extension(@logic(l), @logic(l0), @axiom(ax)) :- _ext(l, l0, ax).
-
-.decl _proves(l : symbol, ax : symbol)
-.input _proves(filename="core/proves.csv", rfc4180=true, headers=true)
-CongLogs.proves(@logic(l), @axiom(ax)) :- _proves(l, ax).
-
-.decl _ax_implies_over(l : symbol, ax1 : symbol, ax2 : symbol)
-.input _ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true, headers=true)
-CongLogs.w_ax_implies_over(@logic(l), @axiom(ax1), @axiom(ax2)) :- _ax_implies_over(l, ax1, ax2).
+.input CongLogs.w_extension(filename="core/cong_ext.csv", rfc4180=true, headers=true)
+.input CongLogs.proves(filename="core/proves.csv", rfc4180=true, headers=true)
+.input CongLogs.w_ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true, headers=true)
 
 // Extra declarations
 
