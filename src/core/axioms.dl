@@ -39,4 +39,4 @@ Axioms.bd(@axiom("Bd₁"), 1).
 Axioms.bd(@axiom("Bd₂"), 2).
 
 Axioms.bw(@axiom("Bw₁"), 1).
-Axioms.bw(@axiom("Bw₂"), 1).
+Axioms.bw(@axiom("Bw₂"), 2).
