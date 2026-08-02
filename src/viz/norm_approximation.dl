@@ -3,7 +3,7 @@
 
 .init norm_approximation = VizComp<Size>
 
-norm_approximation.show(l) :- CongLogs.extends(l, @logic("K")).
+norm_approximation.show(l) :- Modal.Logics.extends(l, @logic("K")).
 
 norm_approximation.hide(@logic("Fm")).
 

@@ -1,0 +1,78 @@
+#pragma once
+#include "./language.dl"
+
+.functor axiom(s : symbol) : Modal.axiom
+.functor logic(s : symbol) : Modal.logic
+
+.comp ModalComp : LanguageComp<formula, Void> {
+  // Formula in string representation
+  .type formula <: symbol
+
+  .decl ax_subframe_hereditary(ax : axiom)
+  .decl ax_cofinal_subframe_hereditary(ax : axiom)
+  ax_cofinal_subframe_hereditary(ax) :- ax_subframe_hereditary(ax).
+
+  .decl l_subframe_hereditary(l : logic)
+  l_subframe_hereditary(l) :- Logics.r_extension(l, l0, ax),
+    l_subframe_hereditary(l0), ax_subframe_hereditary(ax).
+  .decl l_cofinal_subframe_hereditary(l : logic)
+  l_cofinal_subframe_hereditary(l) :- l_subframe_hereditary(l).
+  l_cofinal_subframe_hereditary(l) :- Logics.r_extension(l, l0, ax),
+    l_cofinal_subframe_hereditary(l0), ax_cofinal_subframe_hereditary(ax).
+
+  .decl ax_alt(ax : axiom, n : unsigned)
+  .decl ax_bd(ax : axiom, n : unsigned)
+  .decl ax_bw(ax : axiom, n : unsigned)
+}
+.init Modal = ModalComp
+Modal.language_name("modal").
+
+.output Modal.Axioms.r_name(filename="declared/axiom.csv")
+.output Modal.Logics.r_name(filename="declared/logic.csv")
+
+.decl _axioms(ax : symbol, is_subframe_hereditary : symbol, f : Modal.formula)
+.input _axioms(filename="core/axioms.csv", rfc4180=true, headers=true)
+Modal.Axioms.name_def(@axiom(ax), f) :- _axioms(ax, _, f).
+Modal.ax_subframe_hereditary(@axiom(ax)) :- _axioms(ax, "yes", _).
+Modal.ax_cofinal_subframe_hereditary(@axiom(ax)) :- _axioms(ax, "cofinal", _).
+Modal.ax_subframe_hereditary(ax)
+  :- Modal.ax_alt(ax, _), Modal.ax_bd(ax, _), Modal.ax_bw(ax, _).
+
+Modal.ax_alt(@axiom("Alt₁"), 1).
+Modal.ax_alt(@axiom("Alt₂"), 2).
+
+Modal.ax_bd(@axiom("Bd₁"), 1).
+Modal.ax_bd(@axiom("Bd₂"), 2).
+
+Modal.ax_bw(@axiom("Bw₁"), 1).
+Modal.ax_bw(@axiom("Bw₂"), 2).
+
+.input Modal.Logics.w_extension(filename="core/cong_ext.csv", rfc4180=true, headers=true)
+.input Modal.Logics.proves(filename="core/proves.csv", rfc4180=true, headers=true)
+.input Modal.Logics.w_ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true, headers=true)
+
+// Extra declarations
+
+Modal.Logics.name_def(@logic("E"), $Modal.Logics.Least()).
+Modal.Logics.fin_axiomatizable(@logic("E")).
+
+Modal.Logics.proves(@logic("Fm"), ax) :- Modal.Axioms.r_name(ax).
+
+Modal.Logics.w_ax_implies_over(@logic("E"), ax1, ax2)
+  :- Modal.ax_alt(ax1, n1), Modal.ax_alt(ax2, n2), n1 < n2.
+
+Modal.l_subframe_hereditary(@logic("K")).
+
+// Extra checks
+
+warnings("Two logics are equal: " + l1 + ", " + l2)
+  :- l1 != l2, Modal.Logics.r_equiv(l1, l2).
+
+// Makinson's theorem: for every logic Λ ⊇ K one of the following holds:
+//   - Λ ⊆ Triv
+//   - Λ ⊆ Ver
+//   - Λ |- ⊥
+warnings("Unable to check Makinson's theorem for the logic " + l)
+  :- Modal.Logics.extends(l, @logic("K")),
+      !Modal.Logics.extends(@logic("Triv"), l), !Modal.Logics.extends(@logic("Ver"), l),
+      !Modal.Logics.proves(l, @axiom("Contr")).

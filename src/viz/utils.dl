@@ -1,40 +1,40 @@
 #pragma once
 
-#include "../core/cong_logics.dl"
+#include "../core/modal.dl"
 
 .comp VizComp<C> {
-  .decl logic_category(l : logic, c : C)
+  .decl logic_category(l : Modal.logic, c : C)
   .decl category_name(c : C, c_name : symbol)
   .decl implies(c1 : C, c2 : C)
 
   // Specifies, which logics will be shown
-  .decl show(l : logic)
+  .decl show(l : Modal.logic)
   // Specifies which logics should not be shown
-  .decl hide(l : logic)
+  .decl hide(l : Modal.logic)
 
   // Output
-  .decl out_node(l : logic)
+  .decl out_node(l : Modal.logic)
   out_node(l) :- _show(l).
 
-  .decl out_category(l : logic, c : symbol)
+  .decl out_category(l : Modal.logic, c : symbol)
   out_category(l, c_name) :- _show(l), category_name(c, c_name),
     logic_category(l, c), !_implied_cat(l, c).
 
-  .decl out_edge(l1 : logic, l2 : logic)
+  .decl out_edge(l1 : Modal.logic, l2 : Modal.logic)
   out_edge(l2, l1)
-    :- CongLogs.extends(l1, l2), !_extends_trans(l1, l2), l1 != l2,
+    :- Modal.Logics.extends(l1, l2), !_extends_trans(l1, l2), l1 != l2,
       _show(l1), _show(l2).
 
   // Internal
 
-  .decl _show(l : logic)
+  .decl _show(l : Modal.logic)
   _show(l) :- show(l), !hide(l).
 
-  .decl _extends_trans(l1 : logic, l3 : logic)
+  .decl _extends_trans(l1 : Modal.logic, l3 : Modal.logic)
   _extends_trans(l1, l3) :-
-    CongLogs.r_between(l1, l2, l3), _show(l2),
-    !CongLogs.extends(l2, l1), !CongLogs.extends(l3, l2).
+    Modal.Logics.r_between(l1, l2, l3), _show(l2),
+    !Modal.Logics.extends(l2, l1), !Modal.Logics.extends(l3, l2).
 
-  .decl _implied_cat(l : logic, c : C)
+  .decl _implied_cat(l : Modal.logic, c : C)
   _implied_cat(l, c) :- logic_category(l, c2), implies(c2, c).
 }

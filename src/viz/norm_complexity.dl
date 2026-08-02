@@ -5,7 +5,7 @@
 
 .init norm_complexity = VizComp<NormComplexityCat>
 
-norm_complexity.show(l) :- CongLogs.extends(l, @logic("K")).
+norm_complexity.show(l) :- Modal.Logics.extends(l, @logic("K")).
 norm_complexity.hide(@logic("Fm")).
 
 norm_complexity.category_name($Dec_coNP(), "coNP decidable").

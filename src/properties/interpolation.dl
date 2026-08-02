@@ -1,9 +1,9 @@
 #pragma once
-#include "../core/cong_logics.dl"
+#include "../core/modal.dl"
 
 .comp InterpolationComp {
-  .decl CIP(l : logic, b : Bool3)
-  .decl LIP(l : logic, b : Bool3)
+  .decl CIP(l : Modal.logic, b : Bool3)
+  .decl LIP(l : Modal.logic, b : Bool3)
 
   CIP(l, $True()) :- LIP(l, $True()).
   LIP(l, $False()) :- CIP(l, $False()).

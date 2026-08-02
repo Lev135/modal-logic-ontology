@@ -4,15 +4,15 @@
 
 .init all_logics = VizComp<AllLogicsCat>
 
-all_logics.show(l) :- CongLogs.r_name(l).
+all_logics.show(l) :- Modal.Logics.r_name(l).
 
 all_logics.category_name($Normal(), "normal").
 all_logics.category_name($Monotone(), "monotone").
 
 all_logics.implies($Normal(), $Monotone()).
 
-all_logics.logic_category(l, $Normal()) :- CongLogs.extends(l, @logic("K")).
-all_logics.logic_category(l, $Monotone()) :- CongLogs.extends(l, @logic("EM")).
+all_logics.logic_category(l, $Normal()) :- Modal.Logics.extends(l, @logic("K")).
+all_logics.logic_category(l, $Monotone()) :- Modal.Logics.extends(l, @logic("EM")).
 
 .output all_logics.out_node(filename="all_logics/node.csv", rfc4180=true)
 .output all_logics.out_category(filename="all_logics/category.csv", rfc4180=true)

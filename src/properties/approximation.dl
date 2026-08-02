@@ -1,5 +1,5 @@
 #pragma once
-#include "../core/cong_logics.dl"
+#include "../core/modal.dl"
 
 .type Size = Finite{} | Exponential{} | Polynomial{} | Constant{}
 
@@ -9,38 +9,38 @@
   less($Polynomial(), $Exponential()).
   less($Constant(), $Polynomial()).
 
-  .decl tabular(l : logic)
+  .decl tabular(l : Modal.logic)
   tabular(l) :- approximable(l, $Constant()).
   approximable(l, $Constant()) :- tabular(l).
 
-  .decl fmp(l : logic)
+  .decl fmp(l : Modal.logic)
   fmp(l) :- approximable(l, $Finite()).
   approximable(l, $Finite()) :- fmp(l).
 
-  .decl approximable(l : logic, s : Size)
+  .decl approximable(l : Modal.logic, s : Size)
   approximable(l, s2) :- approximable(l, s1), less(s1, s2).
 }
 
 .init Approximation = ApproximationComp
 
 // ChZa Theorem 18.14
-Approximation.approximable(l, $Polynomial()) :- CongLogs.extends(l, @logic("S4.3")).
+Approximation.approximable(l, $Polynomial()) :- Modal.Logics.extends(l, @logic("S4.3")).
 // ChZa Theorem 18.12
 Approximation.approximable(l, $Polynomial())
-  :- CongLogs.r_extension(l, l0, bd), Axioms.bd(bd, _),
+  :- Modal.Logics.r_extension(l, l0, bd), Modal.ax_bd(bd, _),
     (l0 = @logic("K4"); l0 = @logic("S4"); l0 = @logic("Grz"); l0 = @logic("GL")).
 // ChZa Theorem 18.13
 Approximation.approximable(l, $Polynomial())
-  :- CongLogs.r_extension(l, l0, bw), Axioms.bw(bw, _),
+  :- Modal.Logics.r_extension(l, l0, bw), Modal.ax_bw(bw, _),
     (l0 = @logic("K4"); l0 = @logic("S4"); l0 = @logic("Grz"); l0 = @logic("GL")).
 // Every extension of a tabular logic is tabular
-Approximation.tabular(l) :- Approximation.tabular(l0), CongLogs.extends(l, l0).
+Approximation.tabular(l) :- Approximation.tabular(l0), Modal.Logics.extends(l, l0).
 // KTᵈ is the logic of {◯, ⬤}
 Approximation.tabular(@logic("KTᵈ")).
 // Generalization of Fine's theorem http://doi.org/10.1215/00294527-1306190
 Approximation.fmp(l)
-  :- CongLogs.extends(l, @logic("wK4")),
-    CongLogs.cofinal_subframe_hereditary(l).
+  :- Modal.Logics.extends(l, @logic("wK4")),
+    Modal.l_cofinal_subframe_hereditary(l).
 // TODO reference??
 Approximation.approximable(l, $Polynomial())
-  :- CongLogs.extends(l, l0), (l0 = @logic("KAlt₁"); l0 = @logic("KTAlt₂")).
+  :- Modal.Logics.extends(l, l0), (l0 = @logic("KAlt₁"); l0 = @logic("KTAlt₂")).

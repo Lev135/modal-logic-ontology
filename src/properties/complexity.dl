@@ -1,5 +1,5 @@
 #pragma once
-#include "../core/cong_logics.dl"
+#include "../core/modal.dl"
 #include "./approximation.dl"
 
 .type CompC = P {} | NP {} | coNP {} | PSpace {} | ExpTime {} | ExpSpace {} | Decidable {}
@@ -33,29 +33,29 @@
   in(t, $Decidable()) :- decidable(t).
 }
 
-.type Task = SAT { l : logic, vars : InfUnsigned }
+.type Task = SAT { l : Modal.logic, vars : InfUnsigned }
 
 .init Complexity = ComplexityComp<Task>
 
-Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- CongLogs.r_name(l), inf_less(n1, n2).
+Complexity.simpler($SAT(l, n1), $SAT(l, n2)) :- Modal.Logics.r_name(l), inf_less(n1, n2).
 
 // Every logic with infinitely many variables is coNP-hard
-Complexity.hard($SAT(l, $Inf()), $coNP()) :- CongLogs.r_name(l).
+Complexity.hard($SAT(l, $Inf()), $coNP()) :- Modal.Logics.r_name(l).
 
 // Harrop's theorem
-Complexity.decidable($SAT(l, $Inf())) :- Approximation.fmp(l), CongLogs.fin_axiomatizable(l).
+Complexity.decidable($SAT(l, $Inf())) :- Approximation.fmp(l), Modal.Logics.fin_axiomatizable(l).
 
 // Lower bounds
 
 // https://doi.org/10.1093/jigpal/jzy018
 Complexity.hard($SAT(l, $Fin(1)), $PSpace())
-  :- CongLogs.r_between(@logic("KTB"), l, @logic("K")).
+  :- Modal.Logics.r_between(@logic("KTB"), l, @logic("K")).
 // http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 3
 Complexity.hard($SAT(l, $Fin(0)), $PSpace())
-  :- CongLogs.r_between(@logic("K4"), l, @logic("K")).
+  :- Modal.Logics.r_between(@logic("K4"), l, @logic("K")).
 // http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 8
 Complexity.hard($SAT(l, $Fin(1)), $PSpace())
-  :- CongLogs.r_between(@logic("GL"), l, @logic("K")) ; CongLogs.r_between(@logic("Grz"), l, @logic("K")).
+  :- Modal.Logics.r_between(@logic("GL"), l, @logic("K")) ; Modal.Logics.r_between(@logic("Grz"), l, @logic("K")).
 // http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 10
 Complexity.hard($SAT(@logic("GL.3"), $Fin(1)), $NP()).
 // http://www.aiml.net/volumes/volume4/Chagrov-Rybakov.ps Theorem 12
@@ -63,10 +63,10 @@ Complexity.hard($SAT(l, $Fin(1)), $coNP())
   :- l = @logic("S4.3") ; l = @logic("Grz.3").
 // https://arxiv.org/pdf/2507.12343 Theorem 1
 Complexity.hard($SAT(l, $Fin(2)), $PSpace())
-  :- CongLogs.r_between(@logic("Grz.2"), l, @logic("K")).
+  :- Modal.Logics.r_between(@logic("Grz.2"), l, @logic("K")).
 // https://arxiv.org/pdf/2507.12343 Theorem 2
 Complexity.hard($SAT(l, $Fin(1)), $PSpace())
-  :- CongLogs.r_between(@logic("GL.2"), l, @logic("K")).
+  :- Modal.Logics.r_between(@logic("GL.2"), l, @logic("K")).
 
 
 
@@ -85,20 +85,20 @@ Complexity.in($SAT(l, $Inf()), $coNP()) :- Approximation.approximable(l, $Polyno
 // This result follows from my unpublished material. Of course, for some logics,
 // like K, K4, S4, etc. we could provide references, but I don't know about others
 // TODO: add appropriate citations
-CongLogs.find_extensions_by_some_of(
+Modal.Logics.find_extensions_by_some_of(
   @logic("K"),
   [@axiom("T"), [@axiom("D"), [@axiom("B"), nil]]],
   "K+TDB"
 ).
 Complexity.in($SAT(l, $Inf()), $PSpace())
-  :- CongLogs.r_extension_by_some_of(l, "K+TDB").
-CongLogs.find_extensions_by_some_of(
+  :- Modal.Logics.r_extension_by_some_of(l, "K+TDB").
+Modal.Logics.find_extensions_by_some_of(
   @logic("K4"),
   [@axiom("T"), [@axiom("D"), [@axiom(".1"), [@axiom(".2"), nil]]]],
   "K4+TD.1.2"
 ).
 Complexity.in($SAT(l, $Inf()), $PSpace())
-  :- CongLogs.r_extension_by_some_of(l, "K4+TD.1.2").
+  :- Modal.Logics.r_extension_by_some_of(l, "K4+TD.1.2").
 Complexity.in($SAT(@logic("wK4"), $Inf()), $PSpace()).
 Complexity.in($SAT(l, $Inf()), $PSpace())
   :- l = @logic("GL"); l = @logic("Grz"); l = @logic("GL.2"); l = @logic("Grz.2").
