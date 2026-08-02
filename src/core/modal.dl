@@ -48,7 +48,6 @@ Modal.ax_bw(@axiom("Bw₁"), 1).
 Modal.ax_bw(@axiom("Bw₂"), 2).
 
 .input Modal.Logics.w_extension(filename="core/cong_ext.csv", rfc4180=true, headers=true)
-.input Modal.Logics.proves(filename="core/proves.csv", rfc4180=true, headers=true)
 .input Modal.Logics.w_ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true, headers=true)
 
 // Extra declarations
@@ -57,6 +56,7 @@ Modal.Logics.name_def(@logic("E"), $Modal.Logics.Least()).
 Modal.Logics.fin_axiomatizable(@logic("E")).
 
 Modal.Logics.proves(@logic("Fm"), ax) :- Modal.Axioms.r_name(ax).
+Modal.Logics.proves(@logic("E"), @axiom("Top")).
 
 Modal.Logics.w_ax_implies_over(@logic("E"), ax1, ax2)
   :- Modal.ax_alt(ax1, n1), Modal.ax_alt(ax2, n2), n1 < n2.

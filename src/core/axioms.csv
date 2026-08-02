@@ -5,6 +5,7 @@ N,none,[]t
 P,none,<>t
 Ver,yes,[]f
 Contr,yes,⊥
+Top,yes,⊤
 D,cofinal,[]p-><>p
 4,yes,<><>p-><>p
 4*,yes,<>(p\/<>p)-><>p
