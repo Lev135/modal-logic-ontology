@@ -31,7 +31,7 @@ Modal.language_name("modal").
 .output Modal.Logics.r_name(filename="declared/logic.csv")
 
 .decl _axioms(ax : symbol, is_subframe_hereditary : symbol, f : Modal.formula)
-.input _axioms(filename="core/axioms.csv", rfc4180=true, headers=true)
+.input _axioms(filename="core/modal/axioms.csv", rfc4180=true, headers=true)
 Modal.Axioms.name_def(@axiom(ax), f) :- _axioms(ax, _, f).
 Modal.ax_subframe_hereditary(@axiom(ax)) :- _axioms(ax, "yes", _).
 Modal.ax_cofinal_subframe_hereditary(@axiom(ax)) :- _axioms(ax, "cofinal", _).
@@ -47,8 +47,8 @@ Modal.ax_bd(@axiom("Bd₂"), 2).
 Modal.ax_bw(@axiom("Bw₁"), 1).
 Modal.ax_bw(@axiom("Bw₂"), 2).
 
-.input Modal.Logics.w_extension(filename="core/cong_ext.csv", rfc4180=true, headers=true)
-.input Modal.Logics.w_ax_implies_over(filename="core/ax_implies_over.csv", rfc4180=true, headers=true)
+.input Modal.Logics.w_extension(filename="core/modal/extension.csv", rfc4180=true, headers=true)
+.input Modal.Logics.w_ax_implies_over(filename="core/modal/ax_implies_over.csv", rfc4180=true, headers=true)
 
 // Extra declarations
 
